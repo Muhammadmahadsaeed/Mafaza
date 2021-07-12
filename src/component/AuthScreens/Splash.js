@@ -1,18 +1,29 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Image,ActivityIndicator} from 'react-native';
-import color from '../../constants/colors'
+import {View, StyleSheet, Image, ActivityIndicator} from 'react-native';
+import color from '../../constants/colors';
+import {useSelector} from 'react-redux';
 
 const SplashScreen = ({navigation}) => {
   const [animating, setAnimating] = useState(true);
+  const user = useSelector((state) => state.user.user);
+
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      navigation.navigate('AuthScreens');
+      if (user) {
+        if (user.Role == 'Patient') {
+          navigation.navigate('PatientHomeScreen');
+        } else if (user.Role == 'Doctor') {
+          navigation.navigate('DoctorHomeScreen');
+        }
+      } else {
+        navigation.navigate('AuthScreens');
+      }
     }, 3000);
   }, []);
   return (
     <View style={styles.container}>
-       <Image
+      <Image
         source={require('../../../assets/Images/logo.png')}
         style={{width: '60%', height: 300, resizeMode: 'contain'}}
       />
@@ -28,6 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: color.Colors.White
+    backgroundColor: color.Colors.White,
   },
 });
