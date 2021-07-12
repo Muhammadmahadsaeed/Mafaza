@@ -7,11 +7,14 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Image,
+  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import PhoneInput from 'react-native-phone-number-input';
+import auth from '@react-native-firebase/auth';
+import {api, headers} from '../Config/env';
 
 const PatientSignUp = ({navigation}) => {
   const [wrongname, setwrongname] = useState(false);
@@ -78,12 +81,7 @@ const PatientSignUp = ({navigation}) => {
           if (checkpass == true) {
             if (password == confirmpassword) {
               seterrortext('');
-              const PatientData = {
-                PatientName: name,
-                PatientNumber: formattedValue,
-                PatientPassword: password,
-              };
-              navigation.navigate('PatientOtpScreen',{PatientData})
+              signInWithPhoneNumber();
             } else {
               seterrortext("Password does'nt match");
             }
@@ -99,6 +97,38 @@ const PatientSignUp = ({navigation}) => {
     } else {
       seterrortext('Enter correct name');
     }
+  };
+  async function signInWithPhoneNumber() {
+    try {
+      const PatientData = {
+        PatientName: name,
+        PatientNumber: formattedValue,
+        PatientPassword: password,
+      };
+      const confirmation = await auth().signInWithPhoneNumber(formattedValue);
+      navigation.navigate('PatientOtpScreen', {
+        PatientData: PatientData,
+        Confirmation: confirmation,
+      });
+    } catch (e) {
+      seterrortext('Try again');
+    }
+  }
+  const check = () => {
+    fetch(`${api}doctor/exist`, {
+      method: 'GET',
+      headers: headers,
+      body: JSON.stringify({
+        phone_no: formattedValue,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <View style={styles.container}>
@@ -261,7 +291,7 @@ const PatientSignUp = ({navigation}) => {
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => HandleNext()}
+              onPress={() => check()}
               style={styles.Btndesign}>
               <Text style={styles.Btntext}>Next</Text>
             </TouchableOpacity>

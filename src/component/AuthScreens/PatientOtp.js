@@ -11,13 +11,47 @@ import {
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import OTPTextView from 'react-native-otp-textinput';
+import { api,headers } from '../Config/env';
 
 const PatientOtp = ({navigation}) => {
   let otpInput = useRef(null);
   const [code, setCode] = useState('');
   const [errortext, seterrortext] = useState('');
+  const [confirm, setConfirm] = useState(navigation.getParam('Confirmation'));
   const PatientData = navigation.getParam('PatientData');
 
+  const HandlePatient = () => {
+    fetch(`${api}patient/register`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        name: PatientData.PatientName,
+        password: PatientData.PatientPassword,
+        phone_no: PatientData.PatientNumber,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  async function confirmCode() {
+    if (code.length == 6) {
+      seterrortext("")
+      try {
+        await confirm.confirm(code);
+        HandlePatient();
+
+      } catch (error) {
+        seterrortext('Invalid Code');
+      }
+    } else {
+      seterrortext('code less then 6');
+    }
+  }
   return (
     <View style={styles.container}>
       <ScrollView
@@ -61,7 +95,9 @@ const PatientOtp = ({navigation}) => {
             <View>
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
-            <TouchableOpacity style={styles.Btndesign} onPress={()=>navigation.navigate('PatientHomeScreen')}>
+            <TouchableOpacity
+              style={styles.Btndesign}
+              onPress={() => confirmCode()}>
               <Text style={styles.Btntext}>Submit</Text>
             </TouchableOpacity>
           </View>
