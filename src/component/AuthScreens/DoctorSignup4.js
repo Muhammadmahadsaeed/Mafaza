@@ -8,19 +8,19 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const DoctorSignup3 = ({navigation}) => {
   const [wrongfees, setwrongfees] = useState(false);
   const [correctfees, setcorrectfees] = useState(false);
   const [fees, setfees] = useState('');
   const [errortext, seterrortext] = useState('');
-  const [mafazapatient, setmafazapatient] = useState(false);
-  const [personalpatient, setpersonalpatient] = useState(false);
-  const [both, setboth] = useState(false);
+  const [PatientType, setPatientType] = useState('');
   const [consultonline, setconsultonline] = useState(false);
   const DoctorData = navigation.getParam('DoctorData');
 
@@ -38,13 +38,14 @@ const DoctorSignup3 = ({navigation}) => {
   };
   const HandleContinue = () => {
     if (fees != '' && correctfees == true) {
-      DoctorData.DoctorFees = fees;
-      DoctorData.mafazapatient = mafazapatient;
-      DoctorData.personalpatient = personalpatient;
-      DoctorData.Both = both;
-      DoctorData.consultonline = consultonline;
-      seterrortext('')
-      navigation.navigate('DoctorSignUp5Screen', {DoctorData});
+      if (PatientType != '') {
+        DoctorData.PatientType = PatientType;
+        DoctorData.consultonline = consultonline;
+        seterrortext('');
+        navigation.navigate('DoctorSignUp5Screen', {DoctorData});
+      } else {
+        seterrortext('Select patient type');
+      }
     } else {
       seterrortext('Enter correct fees');
     }
@@ -99,40 +100,6 @@ const DoctorSignup3 = ({navigation}) => {
               </Text>
             </View>
             <View style={[styles.toggleView, {marginTop: 20}]}>
-              <Text style={[styles.toggletext, {color: 'gray'}]}>
-                Mafaza Patient
-              </Text>
-              <ToggleSwitch
-                isOn={mafazapatient}
-                onColor={color.Colors.Blue}
-                offColor="gray"
-                size="small"
-                onToggle={() => setmafazapatient(!mafazapatient)}
-              />
-            </View>
-            <View style={[styles.toggleView, {marginTop: 5}]}>
-              <Text style={[styles.toggletext, {color: 'gray'}]}>
-                Only Personal Patient
-              </Text>
-              <ToggleSwitch
-                isOn={personalpatient}
-                onColor={color.Colors.Blue}
-                offColor="gray"
-                size="small"
-                onToggle={() => setpersonalpatient(!personalpatient)}
-              />
-            </View>
-            <View style={[styles.toggleView, {marginTop: 5}]}>
-              <Text style={[styles.toggletext, {color: 'gray'}]}>Both</Text>
-              <ToggleSwitch
-                isOn={both}
-                onColor={color.Colors.Blue}
-                offColor="gray"
-                size="small"
-                onToggle={() => setboth(!both)}
-              />
-            </View>
-            <View style={[styles.toggleView, {marginTop: 5}]}>
               <Text style={[styles.toggletext, {color: 'black'}]}>
                 Would you like to consult patients online?
               </Text>
@@ -144,6 +111,40 @@ const DoctorSignup3 = ({navigation}) => {
                 onToggle={() => setconsultonline(!consultonline)}
               />
             </View>
+            <View
+              style={{
+                ...(Platform.OS == 'ios' && {
+                  zIndex: 10,
+                }),
+                width: '100%',
+                marginTop: 20,
+              }}>
+              <DropDownPicker
+                items={[
+                  {label: 'Mafaza Patient', value: 'Mafaza Patient'},
+                  {label: 'Personal Patient', value: 'Personal Patient'},
+                  {label: 'Both', value: 'Both'},
+                ]}
+                placeholder="Select Patient Category"
+                selectedLabelStyle={{color: 'black'}}
+                placeholderStyle={{
+                  color: '#9EA0A4',
+                }}
+                containerStyle={{height: 40, width: '100%'}}
+                style={{
+                  backgroundColor: '#fafafa',
+                  borderColor: color.Colors.Blue,
+                  borderRadius: 4,
+                  color: '#000',
+                }}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+                }}
+                dropDownStyle={{backgroundColor: '#fafafa'}}
+                onChangeItem={(item) => setPatientType(item.value)}
+              />
+            </View>
+
             <View>
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>

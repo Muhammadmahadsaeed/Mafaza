@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "70694245296",
+    "project_id": "mafaza-b974a",
+    "storage_bucket": "mafaza-b974a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70694245296:android:7dd54a117d5513ccc6bc75",
+        "android_client_info": {
+          "package_name": "com.mafaza"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70694245296-m53n8416o9gnduejcb1mn9guocpoe59k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mafaza",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "70694245296-lifj3rkhp8p5t3kjujun34cv3tcm9hpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAiLGQ0UDrbEjPH5RhI52Newwyjdj9u-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70694245296-lifj3rkhp8p5t3kjujun34cv3tcm9hpo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

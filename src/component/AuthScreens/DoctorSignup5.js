@@ -7,18 +7,21 @@ import {
   KeyboardAvoidingView,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import * as ImagePicker from 'react-native-image-picker';
 import {PermissionsAndroid} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import auth from '@react-native-firebase/auth';
 
 const DoctorSignup3 = ({navigation}) => {
   const [filePath, setFilePath] = useState([]);
   const refRBSheet = useRef();
   const [imageSelected, setimageSelected] = useState(false);
   const DoctorData = navigation.getParam('DoctorData');
+  const [loading, setLoading] = useState(false);
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -124,11 +127,27 @@ const DoctorSignup3 = ({navigation}) => {
   const HandleContinue = () => {
     if (filePath != '') {
       DoctorData.DoctorImage = filePath;
-      navigation.navigate('DoctorOtpScreen',{DoctorData})
+      setLoading(true);
+      signInWithPhoneNumber();
     } else {
       alert('Kindly Select Image');
     }
   };
+  async function signInWithPhoneNumber() {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(
+        DoctorData.DoctorNumber,
+      );
+      setLoading(false)
+      navigation.navigate('DoctorOtpScreen', {
+        DoctorData: DoctorData,
+        Confirmation: confirmation,
+      });
+    } catch (e) {
+      setLoading(false)
+      alert('Try again Later');
+    }
+  }
   return (
     <View style={styles.container}>
       <ScrollView
@@ -149,10 +168,15 @@ const DoctorSignup3 = ({navigation}) => {
             </TouchableOpacity>
 
             <View style={styles.imageView}>
-              {imageSelected ?
-              <Image source={{uri: filePath.uri}}  style={styles.imageStyle}/> :
-              <Image source={require('../../../assets/Images/doctor.png')}  style={styles.imageStyle}/> }
-              
+              {imageSelected ? (
+                <Image source={{uri: filePath.uri}} style={styles.imageStyle} />
+              ) : (
+                <Image
+                  source={require('../../../assets/Images/doctor.png')}
+                  style={styles.imageStyle}
+                />
+              )}
+
               <TouchableOpacity
                 style={styles.cameraimage}
                 onPress={() => DisplayBottomSheet()}>
@@ -181,9 +205,13 @@ const DoctorSignup3 = ({navigation}) => {
               </Text>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('DoctorOtpScreen')}
+              onPress={() => HandleContinue()}
               style={styles.Btndesign}>
-              <Text style={styles.Btntext}>Continue to Step 6</Text>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.Btntext}>Continue to Step 6</Text>
+              )}            
             </TouchableOpacity>
           </View>
 

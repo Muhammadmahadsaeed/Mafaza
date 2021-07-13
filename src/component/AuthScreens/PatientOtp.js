@@ -7,17 +7,73 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import OTPTextView from 'react-native-otp-textinput';
+import {api, headers} from '../Config/env';
+import {useDispatch} from 'react-redux';
 
 const PatientOtp = ({navigation}) => {
+  const dispatch = useDispatch();
+  const mapDispatchToProps = (value) => {
+    dispatch({type: 'SET_USER', payload: value});
+  };
+
   let otpInput = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [code, setCode] = useState('');
   const [errortext, seterrortext] = useState('');
+  const [confirm, setConfirm] = useState(navigation.getParam('Confirmation'));
   const PatientData = navigation.getParam('PatientData');
 
+  const storeData = (users) => {
+    setLoading(false);
+    mapDispatchToProps(users);
+    navigation.navigate('PatientHomeScreen');
+  };
+
+  const HandlePatient = () => {
+    PatientData.Role = 'PATIENT';
+    fetch(`${api}patient/register`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        name: PatientData.PatientName,
+        password: PatientData.PatientPassword,
+        phone_no: PatientData.PatientNumber,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        if (responseJson.status == 1) {
+          storeData(PatientData);
+        } else {
+          seterrortext('Ckeck your Internet connection');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  async function confirmCode() {
+    setLoading(true);
+    if (code.length == 6) {
+      seterrortext('');
+      try {
+        await confirm.confirm(code);
+        HandlePatient();
+      } catch (error) {
+        setLoading(false);
+        seterrortext('Invalid Code');
+      }
+    } else {
+      setLoading(false);
+      seterrortext('code less then 6');
+    }
+  }
   return (
     <View style={styles.container}>
       <ScrollView
@@ -61,8 +117,14 @@ const PatientOtp = ({navigation}) => {
             <View>
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
-            <TouchableOpacity style={styles.Btndesign} onPress={()=>navigation.navigate('PatientHomeScreen')}>
-              <Text style={styles.Btntext}>Submit</Text>
+            <TouchableOpacity
+              style={styles.Btndesign}
+              onPress={() => confirmCode()}>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.Btntext}>Submit</Text>
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>

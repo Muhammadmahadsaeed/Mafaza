@@ -8,10 +8,12 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import PhoneInput from 'react-native-phone-number-input';
+import {api, headers} from '../Config/env';
 
 const DoctorSignup1 = ({navigation}) => {
   const [wrongname, setwrongname] = useState(false);
@@ -36,7 +38,9 @@ const DoctorSignup1 = ({navigation}) => {
   const [showpassword, setshowpassword] = useState(true);
   const [showconfirmpassword, setshowconfirmpassword] = useState(true);
   const [errortext, seterrortext] = useState('');
+  const [loading, setLoading] = useState(false);
   const [checkpass, setcheckpass] = useState(false);
+  const [Country,setCountry] = useState('Pakistan')
 
   const validatename = (text) => {
     const username = text.toLowerCase();
@@ -124,6 +128,7 @@ const DoctorSignup1 = ({navigation}) => {
     }
   };
   const HandleContinue = () => {
+    seterrortext('')
     if (name != '' && correctname == true) {
       if (email != '' && correctemail == true) {
         if (num != '' && correctnum == true) {
@@ -132,16 +137,37 @@ const DoctorSignup1 = ({navigation}) => {
               if (password.length >= 6) {
                 if (checkpass == true) {
                   if (password == confirmpassword) {
-                    seterrortext('');
-                    const DoctorData = {
-                      DoctorName: name,
-                      DoctorEmail: email,
-                      DoctorNumber: formattedValue,
-                      DoctorExperience: experience,
-                      DoctorMedicalNumber: mdeicalnumber,
-                      DoctorPassword: password,
-                    };
-                    navigation.navigate('DoctorOtpScreen',{DoctorData})
+                    setLoading(true)
+                    fetch(`${api}doctor/exist`, {
+                      method: 'POST',
+                      headers: headers,
+                      body: JSON.stringify({
+                        phone_no: formattedValue,
+                      }),
+                    })
+                      .then((response) => response.json())
+                      .then((responseJson) => {
+                        if (responseJson.status == 0) {
+                          setLoading(false)
+                          seterrortext('User already exsist!');
+                        } else {
+                          setLoading(false)
+                          const DoctorData = {
+                            DoctorName: name,
+                            DoctorEmail: email,
+                            DoctorNumber: formattedValue,
+                            DoctorExperienceYears: experience,
+                            DoctorMedicalNumber: mdeicalnumber,
+                            DoctorPassword: password,
+                            DoctorCountry: Country
+                          };
+                          navigation.navigate('DoctorSignUp2Screen',{DoctorData})
+                        }
+                      })
+                      .catch((error) => {
+                        setLoading(false)
+                        seterrortext('Check your internet connection')
+                      });
                   } else {
                     seterrortext("Password does'nt match");
                   }
@@ -245,6 +271,7 @@ const DoctorSignup1 = ({navigation}) => {
                 codeTextStyle={styles.phonecodetext}
                 textContainerStyle={styles.phonetextcontainer}
                 defaultValue={num}
+                onChangeCountry={(value)=>setCountry(value.name)}
                 defaultCode="PK"
                 layout="second"
                 onChangeText={(text) => {
@@ -377,9 +404,13 @@ const DoctorSignup1 = ({navigation}) => {
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('DoctorSignUp5Screen')}
+              onPress={() => HandleContinue()}
               style={styles.Btndesign}>
-              <Text style={styles.Btntext}>Continue to Step 2</Text>
+                 {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.Btntext}>Continue to Step 2</Text>
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>

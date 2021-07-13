@@ -7,11 +7,14 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Image,
-  TouchableOpacity,
+  ActivityIndicator,
+  TouchableOpacity
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import PhoneInput from 'react-native-phone-number-input';
+import auth from '@react-native-firebase/auth';
+import {api, headers} from '../Config/env';
 
 const PatientSignUp = ({navigation}) => {
   const [wrongname, setwrongname] = useState(false);
@@ -28,6 +31,7 @@ const PatientSignUp = ({navigation}) => {
   const [showconfirmpassword, setshowconfirmpassword] = useState(true);
   const [errortext, seterrortext] = useState('');
   const [checkpass, setcheckpass] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const validatename = (text) => {
     const username = text.toLowerCase();
@@ -72,18 +76,34 @@ const PatientSignUp = ({navigation}) => {
     }
   };
   const HandleNext = () => {
+    seterrortext('');
     if (name != '' && correctname == true) {
       if (num != '' && correctnum == true) {
         if (password.length >= 6) {
           if (checkpass == true) {
             if (password == confirmpassword) {
               seterrortext('');
-              const PatientData = {
-                PatientName: name,
-                PatientNumber: formattedValue,
-                PatientPassword: password,
-              };
-              navigation.navigate('PatientOtpScreen',{PatientData})
+              setLoading(true)
+              fetch(`${api}doctor/exist`, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                  phone_no: formattedValue,
+                }),
+              })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                  if (responseJson.status == 0) {
+                    setLoading(false)
+                    seterrortext('User already exsist!');
+                  } else {
+                    signInWithPhoneNumber();
+                  }
+                })
+                .catch((error) => {
+                  setLoading(false)
+                  seterrortext('Check your internet connection')
+                });
             } else {
               seterrortext("Password does'nt match");
             }
@@ -100,6 +120,25 @@ const PatientSignUp = ({navigation}) => {
       seterrortext('Enter correct name');
     }
   };
+  async function signInWithPhoneNumber() {
+    try {
+      const PatientData = {
+        PatientName: name,
+        PatientNumber: formattedValue,
+        PatientPassword: password,
+      };
+      const confirmation = await auth().signInWithPhoneNumber(formattedValue);
+      setLoading(false)
+      navigation.navigate('PatientOtpScreen', {
+        PatientData: PatientData,
+        Confirmation: confirmation,
+      });
+    } catch (e) {
+      setLoading(false)
+      seterrortext('Try again');
+    }
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -260,10 +299,12 @@ const PatientSignUp = ({navigation}) => {
             <View>
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => HandleNext()}
-              style={styles.Btndesign}>
-              <Text style={styles.Btntext}>Next</Text>
+            <TouchableOpacity onPress={() => HandleNext()} style={styles.Btndesign}>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.Btntext}>Next</Text>
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
