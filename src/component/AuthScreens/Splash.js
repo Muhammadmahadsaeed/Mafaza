@@ -14,7 +14,6 @@ const SplashScreen = ({navigation}) => {
         if (user.Role == 'PATIENT') {
           navigation.navigate('PatientHomeScreen');
         } else if (user.Role == 'DOCTOR') {
-          console.log(user)
           navigation.navigate('DoctorHomeScreen');
         }
       } else {

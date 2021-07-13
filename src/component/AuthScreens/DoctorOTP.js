@@ -7,7 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
@@ -36,12 +36,11 @@ const DoctorOTP = ({navigation}) => {
 
   const HandleDoctor = () => {
     DoctorData.Role = 'DOCTOR';
-    console.log(DoctorData,']]]]]]]]')
     fetch(`${api}doctor/register`, {
       method: 'POST',
       headers: headers,
-      body: {
-        experience: DoctorData.DoctorExperience,
+      body: JSON.stringify({
+        experience: DoctorExperienceYears,
         medical_no: DoctorData.DoctorMedicalNumber,
         name: DoctorData.DoctorName,
         phone_no: DoctorData.DoctorNumber,
@@ -60,14 +59,15 @@ const DoctorOTP = ({navigation}) => {
         consultation_fee: DoctorData.DoctorFees,
         my_patients: DoctorData.PatientType,
         patient_consult_online: DoctorData.consultonline,
-      },
+      }),
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson,'============')
-        if(responseJson.status == 1)
-        {storeData(DoctorData)}
-        else {
+        if (responseJson.status == 1) {
+          setLoading(false)
+          storeData(DoctorData);
+        } else {
+          setLoading(false)
           seterrortext('Ckeck your Internet connection');
         }
       })

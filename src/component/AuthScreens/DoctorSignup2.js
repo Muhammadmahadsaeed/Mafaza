@@ -16,23 +16,23 @@ const DoctorSignUp2 = ({navigation}) => {
   const [errortext, seterrortext] = useState('');
   const DoctorData = navigation.getParam('DoctorData');
   const [qualifications, setqualifications] = useState([
-    {key: 0, Degree: '', Institute: '', Editable: false},
-    {key: 1, Degree: '', Institute: '', Editable: false},
-    {key: 2, Degree: '', Institute: '', Editable: false},
+    {Degree: '', Institute: '', Editable: false},
+    { Degree: '', Institute: '', Editable: false},
+    {Degree: '', Institute: '', Editable: false},
   ]);
   const [experience, setexperience] = useState([
-    {key: 0, Designation: '', Hospital: '', Editable: false},
-    {key: 1, Designation: '', Hospital: '', Editable: false},
-    {key: 2, Designation: '', Hospital: '', Editable: false},
+    {Designation: '', Hospital: '', Editable: false},
+    {Designation: '', Hospital: '', Editable: false},
+    { Designation: '', Hospital: '', Editable: false},
   ]);
   const [speaciality, setspeaciality] = useState([
-    {key: 0, speacialname: ''},
-    {key: 1, speacialname: ''},
-    {key: 2, speacialname: ''},
+    {speacialname: ''},
+    {speacialname: ''},
+    {speacialname: ''},
   ]);
-  const addspeaciality = (key) => {
+  const addspeaciality = () => {
     const _speaciality = [...speaciality];
-    _speaciality.push({key: key, speacialname: ''});
+    _speaciality.push({speacialname: ''});
     setspeaciality(_speaciality);
   };
   const deletespeaciality = (index) => {
@@ -47,7 +47,6 @@ const DoctorSignUp2 = ({navigation}) => {
   const addqualification = (key) => {
     const _qualifications = [...qualifications];
     _qualifications.push({
-      key: key,
       Degree: '',
       Institute: '',
       Editable: false,
@@ -76,7 +75,7 @@ const DoctorSignUp2 = ({navigation}) => {
   };
   const addexperience = (key) => {
     const _experience = [...experience];
-    _experience.push({key: key, office: '', years: '', Editable: false});
+    _experience.push({office: '', years: '', Editable: false});
     setexperience(_experience);
   };
   const deleteexperience = (index) => {
@@ -100,7 +99,6 @@ const DoctorSignUp2 = ({navigation}) => {
     setexperience(_experience);
   };
   const HandleContinue = () => {
-    // 
     if (qualifications[0].Degree != '' && qualifications[0].Institute != '' && qualifications[1].Degree != '' && qualifications[1].Institute != '' && qualifications[2].Degree != '' && qualifications[2].Institute != '') {
       DoctorData.DoctorSpeacility = speaciality;
       DoctorData.DoctorQualification = qualifications;

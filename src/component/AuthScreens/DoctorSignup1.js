@@ -156,7 +156,7 @@ const DoctorSignup1 = ({navigation}) => {
                             DoctorName: name,
                             DoctorEmail: email,
                             DoctorNumber: formattedValue,
-                            DoctorExperience: experience,
+                            DoctorExperienceYears: experience,
                             DoctorMedicalNumber: mdeicalnumber,
                             DoctorPassword: password,
                             DoctorCountry: Country
