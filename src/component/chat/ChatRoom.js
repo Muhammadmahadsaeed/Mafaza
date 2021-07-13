@@ -1,5 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
+import {
+    View,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    Platform,
+    Image,
+    PermissionsAndroid,
+    TouchableWithoutFeedback,
+} from 'react-native';
+import { renderInputToolbar, renderActions, renderComposer, renderSend } from './InputBox';
 
 const ChatRoom = ({ }) => {
     const [messages, setMessages] = useState([]);
@@ -47,6 +60,14 @@ const ChatRoom = ({ }) => {
         setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     }, [])
 
+    const CustomInputBox = (props) => {
+        return (
+            <View style={{ backgroundColor: 'red' }}>
+                <Text>inpu</Text>
+            </View>
+        )
+    }
+  
     return (
         <GiftedChat
             messages={messages}
@@ -54,6 +75,11 @@ const ChatRoom = ({ }) => {
             user={{
                 _id: 1,
             }}
+            renderInputToolbar={renderInputToolbar}
+            renderActions={renderActions}
+            renderComposer={renderComposer}
+            alwaysShowSend
+            renderSend={renderSend}
         />
     )
 }

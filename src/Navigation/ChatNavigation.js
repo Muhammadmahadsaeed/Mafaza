@@ -1,5 +1,5 @@
 import { createStackNavigator,TransitionPresets } from 'react-navigation-stack';
-import * as ChatScreens from '../component/chat'
+import * as ChatScreens from '../component/Chats'
 
 const ChatNavigator = createStackNavigator({
 
