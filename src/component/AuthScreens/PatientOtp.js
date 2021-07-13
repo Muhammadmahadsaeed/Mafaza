@@ -7,7 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
@@ -29,13 +29,13 @@ const PatientOtp = ({navigation}) => {
   const PatientData = navigation.getParam('PatientData');
 
   const storeData = (users) => {
-    setLoading(false)
+    setLoading(false);
     mapDispatchToProps(users);
     navigation.navigate('PatientHomeScreen');
   };
 
   const HandlePatient = () => {
-    PatientData.Role = 'Patient';
+    PatientData.Role = 'PATIENT';
     fetch(`${api}patient/register`, {
       method: 'POST',
       headers: headers,
@@ -47,25 +47,30 @@ const PatientOtp = ({navigation}) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        storeData(PatientData);
+        console.log(responseJson);
+        if (responseJson.status == 1) {
+          storeData(PatientData);
+        } else {
+          seterrortext('Ckeck your Internet connection');
+        }
       })
       .catch((error) => {
         console.error(error);
       });
   };
   async function confirmCode() {
-    setLoading(true)
+    setLoading(true);
     if (code.length == 6) {
       seterrortext('');
       try {
         await confirm.confirm(code);
         HandlePatient();
       } catch (error) {
-        setLoading(false)
+        setLoading(false);
         seterrortext('Invalid Code');
       }
     } else {
-      setLoading(false)
+      setLoading(false);
       seterrortext('code less then 6');
     }
   }

@@ -100,6 +100,7 @@ const DoctorSignUp2 = ({navigation}) => {
     setexperience(_experience);
   };
   const HandleContinue = () => {
+    // 
     if (qualifications[0].Degree != '' && qualifications[0].Institute != '' && qualifications[1].Degree != '' && qualifications[1].Institute != '' && qualifications[2].Degree != '' && qualifications[2].Institute != '') {
       DoctorData.DoctorSpeacility = speaciality;
       DoctorData.DoctorQualification = qualifications;
@@ -270,7 +271,7 @@ const DoctorSignUp2 = ({navigation}) => {
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('DoctorSignUp3Screen')}
+              onPress={() => HandleContinue(0)}
               style={styles.Btndesign}>
               <Text style={styles.Btntext}>Continue to Step 3</Text>
             </TouchableOpacity>

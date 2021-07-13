@@ -11,9 +11,10 @@ const SplashScreen = ({navigation}) => {
     setTimeout(() => {
       setAnimating(false);
       if (user) {
-        if (user.Role == 'Patient') {
+        if (user.Role == 'PATIENT') {
           navigation.navigate('PatientHomeScreen');
-        } else if (user.Role == 'Doctor') {
+        } else if (user.Role == 'DOCTOR') {
+          console.log(user)
           navigation.navigate('DoctorHomeScreen');
         }
       } else {

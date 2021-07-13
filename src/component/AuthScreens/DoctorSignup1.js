@@ -40,6 +40,7 @@ const DoctorSignup1 = ({navigation}) => {
   const [errortext, seterrortext] = useState('');
   const [loading, setLoading] = useState(false);
   const [checkpass, setcheckpass] = useState(false);
+  const [Country,setCountry] = useState('Pakistan')
 
   const validatename = (text) => {
     const username = text.toLowerCase();
@@ -127,6 +128,7 @@ const DoctorSignup1 = ({navigation}) => {
     }
   };
   const HandleContinue = () => {
+    seterrortext('')
     if (name != '' && correctname == true) {
       if (email != '' && correctemail == true) {
         if (num != '' && correctnum == true) {
@@ -149,6 +151,7 @@ const DoctorSignup1 = ({navigation}) => {
                           setLoading(false)
                           seterrortext('User already exsist!');
                         } else {
+                          setLoading(false)
                           const DoctorData = {
                             DoctorName: name,
                             DoctorEmail: email,
@@ -156,6 +159,7 @@ const DoctorSignup1 = ({navigation}) => {
                             DoctorExperience: experience,
                             DoctorMedicalNumber: mdeicalnumber,
                             DoctorPassword: password,
+                            DoctorCountry: Country
                           };
                           navigation.navigate('DoctorSignUp2Screen',{DoctorData})
                         }
@@ -267,6 +271,7 @@ const DoctorSignup1 = ({navigation}) => {
                 codeTextStyle={styles.phonecodetext}
                 textContainerStyle={styles.phonetextcontainer}
                 defaultValue={num}
+                onChangeCountry={(value)=>setCountry(value.name)}
                 defaultCode="PK"
                 layout="second"
                 onChangeText={(text) => {

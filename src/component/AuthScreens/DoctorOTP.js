@@ -7,17 +7,90 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import OTPTextView from 'react-native-otp-textinput';
+import {api, headers} from '../Config/env';
+import {useDispatch} from 'react-redux';
 
 const DoctorOTP = ({navigation}) => {
+  const dispatch = useDispatch();
+  const mapDispatchToProps = (value) => {
+    dispatch({type: 'SET_USER', payload: value});
+  };
+
   let otpInput = useRef(null);
   const [code, setCode] = useState('');
   const [errortext, seterrortext] = useState('');
   const DoctorData = navigation.getParam('DoctorData');
+  const [confirm, setConfirm] = useState(navigation.getParam('Confirmation'));
+  const [loading, setLoading] = useState(false);
 
+  const storeData = (users) => {
+    setLoading(false);
+    mapDispatchToProps(users);
+    navigation.navigate('DoctorHomeScreen');
+  };
+
+  const HandleDoctor = () => {
+    DoctorData.Role = 'DOCTOR';
+    console.log(DoctorData,']]]]]]]]')
+    fetch(`${api}doctor/register`, {
+      method: 'POST',
+      headers: headers,
+      body: {
+        experience: DoctorData.DoctorExperience,
+        medical_no: DoctorData.DoctorMedicalNumber,
+        name: DoctorData.DoctorName,
+        phone_no: DoctorData.DoctorNumber,
+        email: DoctorData.DoctorEmail,
+        password: DoctorData.DoctorPassword,
+        about: DoctorData.DoctorSpeacility,
+        qualification: DoctorData.DoctorQualification,
+        past_experience: DoctorData.DoctorExperience,
+        country: DoctorData.DoctorCountry,
+        city: DoctorData.DoctorCity,
+        hospital: DoctorData.DoctorHospital,
+        address: DoctorData.reviewaddress,
+        designation: DoctorData.DoctorDesignation,
+        assistant: DoctorData.assistantname,
+        assistant_no: DoctorData.assistantnumber,
+        consultation_fee: DoctorData.DoctorFees,
+        my_patients: DoctorData.PatientType,
+        patient_consult_online: DoctorData.consultonline,
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson,'============')
+        if(responseJson.status == 1)
+        {storeData(DoctorData)}
+        else {
+          seterrortext('Ckeck your Internet connection');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  async function confirmCode() {
+    setLoading(true);
+    if (code.length == 6) {
+      seterrortext('');
+      try {
+        await confirm.confirm(code);
+        HandleDoctor();
+      } catch (error) {
+        setLoading(false);
+        seterrortext('Invalid Code');
+      }
+    } else {
+      setLoading(false);
+      seterrortext('code less then 6');
+    }
+  }
   return (
     <View style={styles.container}>
       <ScrollView
@@ -54,8 +127,14 @@ const DoctorOTP = ({navigation}) => {
             <View>
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
-            <TouchableOpacity style={styles.Btndesign} onPress={()=>navigation.navigate("DoctorHomeScreen")}>
-              <Text style={styles.Btntext}>Continue to the Dashboard</Text>
+            <TouchableOpacity
+              style={styles.Btndesign}
+              onPress={() => confirmCode()}>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.Btntext}>Continue to the Dashboard</Text>
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -97,7 +176,7 @@ const styles = StyleSheet.create({
     fontFamily: font.fonts.PoppinsRegular,
     fontSize: 16,
     marginTop: 20,
-    textAlign:'justify'
+    textAlign: 'justify',
   },
   textInputContainer: {
     marginTop: 20,

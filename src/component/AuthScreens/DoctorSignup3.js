@@ -25,6 +25,9 @@ const DoctorSignup3 = ({navigation}) => {
   const [errortext, seterrortext] = useState('');
   const [wronghospital, setwronghospital] = useState(false);
   const [correcthospital, setcorrecthospital] = useState(false);
+  const [wrongdesignation, setwrongdesignation] = useState(false);
+  const [correctdesignation, setcorrectdesignation] = useState(false);
+  const [designation, setdesignation] = useState('');
   const [hospital, sethospital] = useState('');
   const [wrongassistantname, setwrongassistantname] = useState(false);
   const [correctassistantname, setcorrectassistantname] = useState(false);
@@ -43,6 +46,19 @@ const DoctorSignup3 = ({navigation}) => {
       setcorrectcity(true);
       setwrongcity(false);
       setcity(city);
+    }
+  };
+  const validatedesignation = (text) => {
+    const designation = text.toLowerCase();
+    let reg = /^[a-z ,.'-]+$/i;
+    if (reg.test(designation) === false) {
+      setcorrectdesignation(false);
+      setwrongdesignation(true);
+      return false;
+    } else {
+      setcorrectdesignation(true);
+      setwrongdesignation(false);
+      setdesignation(designation);
     }
   };
   const validatehospital = (text) => {
@@ -84,32 +100,37 @@ const DoctorSignup3 = ({navigation}) => {
     }
   };
   const HandleContinue = () => {
-    if (city != '' && correctcity == true) {
-      if (hospital != '' && correcthospital == true) {
-        if (reviewaddress != '') {
-          if (assistantname != '' && correctassistantname == true) {
-            if (num != '' && correctnum == true) {
-              DoctorData.DoctorCity = city;
-              DoctorData.DoctorHospital = hospital;
-              DoctorData.reviewaddress = reviewaddress;
-              DoctorData.assistantname = assistantname;
-              DoctorData.assistantnumber = formattedValue;
-              navigation.navigate('DoctorSignUp4Screen',{DoctorData})
-              seterrortext('')
+    if (designation != '' && correctdesignation == true) {
+      if (city != '' && correctcity == true) {
+        if (hospital != '' && correcthospital == true) {
+          if (reviewaddress != '') {
+            if (assistantname != '' && correctassistantname == true) {
+              if (num != '' && correctnum == true) {
+                DoctorData.DoctorDesignation = designation;
+                DoctorData.DoctorCity = city;
+                DoctorData.DoctorHospital = hospital;
+                DoctorData.reviewaddress = reviewaddress;
+                DoctorData.assistantname = assistantname;
+                DoctorData.assistantnumber = formattedValue;
+                navigation.navigate('DoctorSignUp4Screen', {DoctorData});
+                seterrortext('');
+              } else {
+                seterrortext('Enter correct number');
+              }
             } else {
-              seterrortext('Enter correct number');
+              seterrortext('Enter correct assistant name');
             }
           } else {
-            seterrortext('Enter correct assistant name');
+            seterrortext('Enter correct address');
           }
         } else {
-          seterrortext('Enter correct address');
+          seterrortext('Enter correct Hospital');
         }
       } else {
-        seterrortext('Enter correct Hospital');
+        seterrortext('Enter correct city');
       }
     } else {
-      seterrortext('Enter correct city');
+      seterrortext('Enter correct designation');
     }
   };
   return (
@@ -130,6 +151,33 @@ const DoctorSignup3 = ({navigation}) => {
               />
               <Text style={styles.BTVtext}>Step 3 of 6 - Practice Details</Text>
             </TouchableOpacity>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputStyle}
+                placeholder="Enter Designation"
+                autoCapitalize="none"
+                keyboardType="ascii-capable"
+                returnKeyType="next"
+                underlineColorAndroid="#f000"
+                blurOnSubmit={false}
+                onChangeText={(text) => validatedesignation(text)}
+              />
+              <View style={styles.iconRight} activeOpacity={0.8}>
+                {wrongdesignation && (
+                  <Image
+                    source={require('../../../assets/Images/wrong.png')}
+                    style={styles.iconRightImage}
+                  />
+                )}
+                {correctdesignation && (
+                  <Image
+                    source={require('../../../assets/Images/correct.png')}
+                    style={styles.iconRightImage}
+                  />
+                )}
+              </View>
+            </View>
+
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputStyle}
