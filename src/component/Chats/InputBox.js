@@ -205,7 +205,7 @@ class InputBox extends React.Component {
                             activeOpacity={0.8}>
                             <View style={styles.buttonContainer}>
                                 <Image
-                                    source={msg.length ? require('../../../assets/Images/send.png') : require('../../../assets/Images/voice.png')}
+                                    source={msg.length ? require('../../../assets/Images/Send.png') : require('../../../assets/Images/voice.png')}
                                     style={styles.btnIcon}
                                 />
                             </View>

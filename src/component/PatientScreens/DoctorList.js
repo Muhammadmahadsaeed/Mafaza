@@ -10,8 +10,8 @@ import {
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 
-const DoctorList = ({ navigation }) => {
-
+const DoctorList = ({ navigation,data }) => {
+console.log(data);
     const goToChatRoom = (item) => {
        navigation.navigate('ChatScreen')
  
@@ -23,8 +23,8 @@ const DoctorList = ({ navigation }) => {
                 <Image source={require('../../../assets/Images/doctor.png')} style={styles.img} />
             </View>
             <View style={{ flex: 3}}>
-                <Text style={styles.heading}>Dr. Zainab Abbasi</Text>
-                <Text style={styles.para}>Heart Surgeon</Text>
+                <Text style={styles.heading}>{data.name}</Text>
+                <Text style={styles.para}>{data.designation}</Text>
             </View>
             <View
                 style={{

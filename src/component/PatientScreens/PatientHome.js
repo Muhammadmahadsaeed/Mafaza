@@ -10,6 +10,7 @@ import {
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {api, headers} from '../Config/env';
+import DoctorList from './DoctorList';
 
 const PatientHome = ({navigation}) => {
   const [dataSource, setDataSource] = useState([]);
@@ -202,61 +203,7 @@ const PatientHome = ({navigation}) => {
             <FlatList
               data={dataSource}
               renderItem={({item}) => (
-                <TouchableOpacity
-                  style={{
-                    borderRadius: 20,
-                    padding: 7,
-                    height: 120,
-                    marginTop: 20,
-                    flexDirection: 'row',
-                    backgroundColor: 'white',
-                    elevation: 7,
-                  }}>
-                  <View style={{flex: 1, padding: 10}}>
-                    <Image
-                      source={require('../../../assets/Images/doctor.png')}
-                      resizeMode="stretch"
-                      style={styles.DoctorImage}
-                    />
-                  </View>
-                  <View style={{flex: 3}}>
-                    <Text
-                      style={{
-                        fontFamily: fonts.fonts.PoppinsRegular,
-                        fontSize: 16,
-                        marginTop: 10,
-                        marginLeft: 5,
-                      }}>
-                      {item.name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: fonts.fonts.PoppinsRegular,
-                        fontSize: 14,
-                        marginLeft: 5,
-                        color: colors.Colors.Gray,
-                      }}>
-                      {item.designation}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flex: 0.6,
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      source={require('../../../assets/Images/cross.png')}
-                      resizeMode="contain"
-                      style={{position: 'absolute', top: -20}}
-                    />
-                    <TouchableOpacity style={{bottom: 7, position: 'absolute'}}>
-                      <Image
-                        source={require('../../../assets/Images/bluemessage.png')}
-                        resizeMode="contain"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </TouchableOpacity>
+                <DoctorList data={item} navigation={navigation}/>
               )}
               keyExtractor={(item, index) => index.toString()}
             />
