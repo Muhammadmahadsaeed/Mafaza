@@ -19,6 +19,7 @@ const ChatNavigator = createStackNavigator({
   defaultNavigationOptions: {
     ...TransitionPresets.SlideFromRightIOS,
   },
+  
 });
 
 export default ChatNavigator;

@@ -1,23 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, { createFactory, useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
-  FlatList,
+  TouchableOpacity, Platform,
+  FlatList, PermissionsAndroid
 } from 'react-native';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
+import { createDirectory } from '../utils/directory';
+import { askForPermission } from '../utils/permission';
 
-const DoctorHome = ({navigation}) => {
+const DoctorHome = ({ navigation }) => {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
+   
     fetch('https://jsonplaceholder.typicode.com/todos')
       .then((response) => response.json())
       .then((json) => setDataSource(json));
+      checkPermission()
   }, []);
+
+  const checkPermission = async () =>{
+    try {
+      const res = await askForPermission()
+      if(res == 'granted'){
+        await createDirectory()
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -30,14 +46,14 @@ const DoctorHome = ({navigation}) => {
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <View style={[styles.rightview, {marginRight: 20}]}>
+        <View style={[styles.rightview, { marginRight: 20 }]}>
           <View style={styles.innerrightview}>
             <Text style={styles.nametext}>Syed Kashan Tayyab</Text>
             <View style={styles.locationView}>
               <Image
                 source={require('../../../assets/Images/location.png')}
                 resizeMode="contain"
-                style={{height: 18}}
+                style={{ height: 18 }}
               />
               <Text style={styles.locationText}>Karachi</Text>
             </View>
@@ -52,7 +68,7 @@ const DoctorHome = ({navigation}) => {
         </View>
       </View>
       <View style={styles.lowercontainer}>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           <View style={styles.uppertextView}>
             <TouchableOpacity>
               <Text
@@ -86,13 +102,13 @@ const DoctorHome = ({navigation}) => {
               data={dataSource}
               showsHorizontalScrollIndicator={false}
               horizontal={true}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity style={styles.FlatListTouchButton}>
-                  <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{flex: 3}}>
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 3 }}>
                       <View style={[styles.rightview]}>
                         <View
-                          style={[styles.DoctorImageView, {marginLeft: 10,borderColor: colors.Colors.Orange}]}>
+                          style={[styles.DoctorImageView, { marginLeft: 10, borderColor: colors.Colors.Orange }]}>
                           <Image
                             source={require('../../../assets/Images/doctor.png')}
                             resizeMode="stretch"
@@ -106,17 +122,17 @@ const DoctorHome = ({navigation}) => {
                           <View
                             style={[
                               styles.locationView,
-                              {alignSelf: 'flex-start', marginLeft: 6},
+                              { alignSelf: 'flex-start', marginLeft: 6 },
                             ]}>
                             <Image
                               source={require('../../../assets/Images/orangelocation.png')}
                               resizeMode="contain"
-                              style={{height: 18}}
+                              style={{ height: 18 }}
                             />
                             <Text
                               style={[
                                 styles.locationText,
-                                {color: colors.Colors.Orange},
+                                { color: colors.Colors.Orange },
                               ]}>
                               Karachi
                             </Text>
@@ -124,8 +140,8 @@ const DoctorHome = ({navigation}) => {
                         </View>
                       </View>
                     </View>
-                    <View style={{flex: 1, justifyContent: 'center'}}>
-                      <TouchableOpacity style={{alignItems: 'center'}}>
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                      <TouchableOpacity style={{ alignItems: 'center' }}>
                         <Image
                           source={require('../../../assets/Images/cross.png')}
                           resizeMode="contain"
@@ -133,17 +149,17 @@ const DoctorHome = ({navigation}) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{flex: 1}}>
+                  <View style={{ flex: 1 }}>
                     <View
                       style={[
                         styles.belowButtonView,
-                        {paddingLeft: 5, paddingRight: 5},
+                        { paddingLeft: 5, paddingRight: 5 },
                       ]}>
                       <TouchableOpacity style={styles.belowButton}>
                         <View
                           style={[
                             styles.bellowbuttoninnerview,
-                            {width: '15%'},
+                            { width: '15%' },
                           ]}>
                           <Image
                             source={require('../../../assets/Images/clock.png')}
@@ -153,10 +169,10 @@ const DoctorHome = ({navigation}) => {
                         <View
                           style={[
                             styles.bellowbuttoninnerview,
-                            {width: '85%'},
+                            { width: '85%' },
                           ]}>
                           <Text
-                            style={[styles.belowButtonText, {marginLeft: 10}]}>
+                            style={[styles.belowButtonText, { marginLeft: 10 }]}>
                             Sunday 6-Jan 2022
                           </Text>
                         </View>
@@ -169,7 +185,7 @@ const DoctorHome = ({navigation}) => {
             />
           </View>
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Text style={styles.OtherappointmentText}>
             See Other Appointments
           </Text>
@@ -177,12 +193,12 @@ const DoctorHome = ({navigation}) => {
             <TouchableOpacity
               style={[
                 styles.TouchButton,
-                {backgroundColor: '#FEE4D2', marginLeft: 20},
+                { backgroundColor: '#FEE4D2', marginLeft: 20 },
               ]}>
               <Image
                 source={require('../../../assets/Images/pastapointment.png')}
                 resizeMode="contain"
-                style={{height: '40%'}}
+                style={{ height: '40%' }}
               />
               <Text
                 style={{
@@ -196,12 +212,12 @@ const DoctorHome = ({navigation}) => {
             <TouchableOpacity
               style={[
                 styles.TouchButton,
-                {backgroundColor: '#FFDDDD', marginLeft: 10, marginRight: 20},
+                { backgroundColor: '#FFDDDD', marginLeft: 10, marginRight: 20 },
               ]}>
               <Image
                 source={require('../../../assets/Images/cancelapointment.png')}
                 resizeMode="contain"
-                style={{height: '40%'}}
+                style={{ height: '40%' }}
               />
               <Text
                 style={{
@@ -215,12 +231,12 @@ const DoctorHome = ({navigation}) => {
           </View>
           <View style={styles.belowButtonView}>
             <TouchableOpacity style={styles.belowButton}>
-              <View style={[styles.bellowbuttoninnerview, {width: '85%'}]}>
-                <Text style={[styles.belowButtonText, {marginLeft: 10}]}>
+              <View style={[styles.bellowbuttoninnerview, { width: '85%' }]}>
+                <Text style={[styles.belowButtonText, { marginLeft: 10 }]}>
                   Payments
                 </Text>
               </View>
-              <View style={[styles.bellowbuttoninnerview, {width: '15%'}]}>
+              <View style={[styles.bellowbuttoninnerview, { width: '15%' }]}>
                 <Image
                   source={require('../../../assets/Images/rightarrow.png')}
                   resizeMode="contain"

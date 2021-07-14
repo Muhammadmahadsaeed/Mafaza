@@ -40,7 +40,7 @@ const DoctorOTP = ({navigation}) => {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({
-        experience: DoctorExperienceYears,
+        experience: DoctorData.DoctorExperienceYears,
         medical_no: DoctorData.DoctorMedicalNumber,
         name: DoctorData.DoctorName,
         phone_no: DoctorData.DoctorNumber,

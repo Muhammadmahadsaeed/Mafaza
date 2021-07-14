@@ -7,8 +7,8 @@ import DoctorNavigatior from './DoctorDrawerNavigation'
 const RootNavigator = createSwitchNavigator({
   // SplashScreen: AuthIndex.Splash,
   // AuthScreens: AuthNavigation,
-  // PatientNavigation: PatientNavigator,
-  DoctorDrawer: DoctorNavigatior
+  PatientNavigation: PatientNavigator,
+  // DoctorDrawer: DoctorNavigatior
 });
 
 const Navigator = createAppContainer(RootNavigator);
