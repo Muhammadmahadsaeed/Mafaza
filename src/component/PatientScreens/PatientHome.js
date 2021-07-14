@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,37 +9,32 @@ import {
 } from 'react-native';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
-import {api, headers} from '../Config/env';
+import { api, headers } from '../Config/env';
 import DoctorList from './DoctorList';
 
-const PatientHome = ({navigation}) => {
+const PatientHome = ({ navigation }) => {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
-    fetch(`${api}admin/find/doctor/approved`, {
+    getDoctors()
+  }, []);
+
+  const getDoctors = async () => {
+    await fetch(`${api}admin/find/doctor/approved`, {
       method: 'GET',
       headers: headers,
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("-0-------------------");
-        console.log(responseJson);
         if (responseJson.status == 1) {
           setDataSource(responseJson.data);
-          console.log(dataSource,'==================');
-        } 
+
+        }
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
-
-  // const getDoctors = async () =>{
-  //   await fetch(`${api}patient_chat/contact`,{
-  //     headers: headers
-  //   })
-  //   .then
-  // }
+  }
 
   return (
     <View style={styles.container}>
@@ -52,14 +47,14 @@ const PatientHome = ({navigation}) => {
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <View style={[styles.rightview, {marginRight: 20}]}>
+        <View style={[styles.rightview, { marginRight: 20 }]}>
           <View style={styles.innerrightview}>
             <Text style={styles.nametext}>Syed Kashan Tayyab</Text>
             <View style={styles.locationView}>
               <Image
                 source={require('../../../assets/Images/location.png')}
                 resizeMode="contain"
-                style={{height: 18}}
+                style={{ height: 18 }}
               />
               <Text style={styles.locationText}>Karachi</Text>
             </View>
@@ -74,7 +69,7 @@ const PatientHome = ({navigation}) => {
         </View>
       </View>
       <View style={styles.lowercontainer}>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           <View style={styles.uppertextView}>
             <Text
               style={{
@@ -106,15 +101,15 @@ const PatientHome = ({navigation}) => {
               data={dataSource}
               showsHorizontalScrollIndicator={false}
               horizontal={true}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity style={styles.FlatListTouchButton}>
-                  <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{flex: 3}}>
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 3 }}>
                       <View style={[styles.rightview]}>
                         <View
                           style={[
                             styles.DoctorImageView,
-                            {marginLeft: 10, borderColor: 'white'},
+                            { marginLeft: 10, borderColor: 'white' },
                           ]}>
                           <Image
                             source={require('../../../assets/Images/doctor.png')}
@@ -123,21 +118,21 @@ const PatientHome = ({navigation}) => {
                           />
                         </View>
                         <View style={styles.innerrightview}>
-                          <Text style={[styles.nametext, {color: 'white'}]}>
+                          <Text style={[styles.nametext, { color: 'white' }]}>
                             Syed Kashan Tayyab
                           </Text>
                           <Text
                             style={[
                               styles.nametext,
-                              {fontSize: 12, color: 'white'},
+                              { fontSize: 12, color: 'white' },
                             ]}>
                             Heart Surgeon
                           </Text>
                         </View>
                       </View>
                     </View>
-                    <View style={{flex: 1, justifyContent: 'center'}}>
-                      <TouchableOpacity style={{alignItems: 'center'}}>
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                      <TouchableOpacity style={{ alignItems: 'center' }}>
                         <Image
                           source={require('../../../assets/Images/cross.png')}
                           resizeMode="contain"
@@ -145,17 +140,17 @@ const PatientHome = ({navigation}) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{flex: 1}}>
+                  <View style={{ flex: 1 }}>
                     <View
                       style={[
                         styles.belowButtonView,
-                        {paddingLeft: 5, paddingRight: 5},
+                        { paddingLeft: 5, paddingRight: 5 },
                       ]}>
                       <TouchableOpacity style={styles.belowButton}>
                         <View
                           style={[
                             styles.bellowbuttoninnerview,
-                            {width: '15%'},
+                            { width: '15%' },
                           ]}>
                           <Image
                             source={require('../../../assets/Images/clock.png')}
@@ -165,10 +160,10 @@ const PatientHome = ({navigation}) => {
                         <View
                           style={[
                             styles.bellowbuttoninnerview,
-                            {width: '85%'},
+                            { width: '85%' },
                           ]}>
                           <Text
-                            style={[styles.belowButtonText, {marginLeft: 10}]}>
+                            style={[styles.belowButtonText, { marginLeft: 10 }]}>
                             Sunday 6-Jan 2022
                           </Text>
                         </View>
@@ -176,13 +171,13 @@ const PatientHome = ({navigation}) => {
                     </View>
                   </View>
                 </TouchableOpacity>
-              
+
               )}
               keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <View style={styles.lowerInnerView}>
             <Text style={styles.letsfinddoctortext}>
               Let's Find Your Doctor
@@ -202,8 +197,8 @@ const PatientHome = ({navigation}) => {
             }}>
             <FlatList
               data={dataSource}
-              renderItem={({item}) => (
-                <DoctorList data={item} navigation={navigation}/>
+              renderItem={({ item }) => (
+                <DoctorList data={item} navigation={navigation} />
               )}
               keyExtractor={(item, index) => index.toString()}
             />

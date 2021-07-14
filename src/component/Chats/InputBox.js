@@ -19,6 +19,7 @@ import AudioRecorderPlayer, {
     AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import uuid from 'react-native-uuid';
+
 import { getAudioFolderPath } from '../utils/directory';
 
 class InputBox extends React.Component {
@@ -141,26 +142,21 @@ class InputBox extends React.Component {
 
     };
     onSendMessage = () => {
-        // const {msg} = this.state;
-        // console.log("msg from state=====",msg);
-        // Encrypt
-        // let message = CryptoJS.AES.encrypt(msg, 'secret key 123').toString();
         let message = this.state.msg;
         this.setState({ msg: '' })
         this.textInput.clear();
-        console.log(message);
         // this.textInput.blur();
-        // let messageObj = {
-        //   messageId: uuid.v4(),
-        //   userName: 'mahad',
-        //   senderId: this.props.senderId,
-        //   receiverId: this.props.receiverId,
-        //   type: 'text',
-        //   isDownload: false,
-        //   messageText: message,
-        //   sendTime: Date.now()
-        // };
-        // this.props.getDataFromInput(messageObj);
+        let messageObj = {
+          messageId: uuid.v4(),
+          userName: 'mahad',
+          senderId: this.props.senderId,
+          receiverId: this.props.receiverId,
+          type: 'text',
+          isDownload: false,
+          messageText: message,
+          sendTime: Date.now()
+        };
+        this.props.getDataFromInput(messageObj);
     
       };
     render() {
@@ -205,7 +201,7 @@ class InputBox extends React.Component {
                             activeOpacity={0.8}>
                             <View style={styles.buttonContainer}>
                                 <Image
-                                    source={msg.length ? require('../../../assets/Images/Send.png') : require('../../../assets/Images/voice.png')}
+                                    source={msg.length ? require('../../../assets/Images/send.png') : require('../../../assets/Images/voice.png')}
                                     style={styles.btnIcon}
                                 />
                             </View>

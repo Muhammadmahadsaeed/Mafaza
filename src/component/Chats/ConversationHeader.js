@@ -8,32 +8,28 @@ import {
     UIManager,
     findNodeHandle,
 } from 'react-native';
-const ConversationHeader = ({ props }) => {
+const ConversationHeader = ({ navigation }) => {
+    console.log(navigation);
     return (
         <View style={styles.header}>
             <View style={styles.left}>
                 <View style={styles.row}>
-                    <View>
-                        <Text>back icon</Text>
-                    </View>
-                    <View>
-                        <Text>profile</Text>
-                    </View>
+                    <TouchableOpacity style={styles.leftIcon} activeOpacity={0.8} onPress={() => goToBack()}>
+                        <Image source={require('../../../assets/Images/Back.png')}
+                            style={styles.leftIconImg} />
+                    </TouchableOpacity>
                 </View>
 
             </View>
             <View style={styles.right}>
-                <View style={styles.row}>
-                    <TouchableOpacity>
-                        <View style={styles.icon}>
-                            <Image source={require('../../../assets/Images/video-call.png')} 
-                            style={styles.img}/>
-                        </View>
-                    </TouchableOpacity>
-                    <View>
-                        <Text>profile</Text>
-                    </View>
-                </View>
+                <TouchableOpacity style={styles.icon}>
+                    <Image source={require('../../../assets/Images/video-call.png')}
+                        style={styles.img} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.icon}>
+                    <Image source={require('../../../assets/Images/audio-call.png')}
+                        style={styles.img} />
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -51,25 +47,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#FBFBFB'
     },
     left: {
-        backgroundColor: 'red'
+        // backgroundColor: 'red'
+    },
+    leftIcon:{
+        paddingHorizontal: 10,
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+  
+    },
+    leftIconImg:{
+        height: '50%',
+        width: '80%',
+        resizeMode: 'contain',
     },
     row: {
         flexDirection: 'row',
-
     },
     right: {
-        backgroundColor: 'blue'
+        flexDirection: 'row',
     },
     icon: {
-        height: 100,
-        width: 100,
-        backgroundColor: 'black'
+        paddingHorizontal: 5,
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     img: {
-        height: '100%',
-        width: '100%',
-        resizeMode:'cover',
-        backgroundColor:'green'
+        height: '80%',
+        width: '80%',
+        resizeMode: 'contain',
     }
 
 });
