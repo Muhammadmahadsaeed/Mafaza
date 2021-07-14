@@ -11,16 +11,28 @@ import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import { api, headers } from '../Config/env';
 import DoctorList from './DoctorList';
+import {useSelector} from 'react-redux';
 
 const PatientHome = ({ navigation }) => {
   const [dataSource, setDataSource] = useState([]);
+  const [Appointments, setAppointments] = useState([]);
+  const user = useSelector(state => state.user.user);
 
   useEffect(() => {
+<<<<<<< HEAD
     getDoctors()
   }, []);
 
   const getDoctors = async () => {
     await fetch(`${api}admin/find/doctor/approved`, {
+=======
+    getDoctors();
+    getAppointments();
+  }, []);
+
+  const getDoctors = () => {
+    fetch(`${api}admin/find/doctor/approved`, {
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
       method: 'GET',
       headers: headers,
     })
@@ -28,13 +40,38 @@ const PatientHome = ({ navigation }) => {
       .then((responseJson) => {
         if (responseJson.status == 1) {
           setDataSource(responseJson.data);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
         }
       })
       .catch((error) => {
         console.log(error);
       });
+<<<<<<< HEAD
   }
+=======
+  };
+  const getAppointments = () => {
+    fetch(`${api}appointment/show`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        patientId: user.data.user._id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == 1) {
+          setAppointments(responseJson.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
 
   return (
     <View style={styles.container}>
@@ -49,7 +86,7 @@ const PatientHome = ({ navigation }) => {
         </TouchableOpacity>
         <View style={[styles.rightview, { marginRight: 20 }]}>
           <View style={styles.innerrightview}>
-            <Text style={styles.nametext}>Syed Kashan Tayyab</Text>
+            <Text style={styles.nametext}>{user.data.user.name}</Text>
             <View style={styles.locationView}>
               <Image
                 source={require('../../../assets/Images/location.png')}
@@ -95,8 +132,9 @@ const PatientHome = ({ navigation }) => {
               height: '70%',
               paddingLeft: 20,
               paddingRight: 20,
-              paddingTop: 10,
+              paddingTop: 10
             }}>
+<<<<<<< HEAD
             <FlatList
               data={dataSource}
               showsHorizontalScrollIndicator={false}
@@ -125,11 +163,43 @@ const PatientHome = ({ navigation }) => {
                             style={[
                               styles.nametext,
                               { fontSize: 12, color: 'white' },
+=======
+              <FlatList
+                data={Appointments}
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}
+                renderItem={({item}) => (
+                  <TouchableOpacity style={styles.FlatListTouchButton}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View style={{flex: 3}}>
+                        <View style={[styles.rightview]}>
+                          <View
+                            style={[
+                              styles.DoctorImageView,
+                              {marginLeft: 10, borderColor: 'white'},
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
                             ]}>
-                            Heart Surgeon
-                          </Text>
+                            <Image
+                              source={require('../../../assets/Images/doctor.png')}
+                              resizeMode="stretch"
+                              style={styles.DoctorImage}
+                            />
+                          </View>
+                          <View style={styles.innerrightview}>
+                            <Text style={[styles.nametext, {color: 'white'}]}>
+                              {item.doctorId.name}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.nametext,
+                                {fontSize: 12, color: 'white'},
+                              ]}>
+                              {item.doctorId.designation}
+                            </Text>
+                          </View>
                         </View>
                       </View>
+<<<<<<< HEAD
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
                       <TouchableOpacity style={{ alignItems: 'center' }}>
@@ -152,10 +222,15 @@ const PatientHome = ({ navigation }) => {
                             styles.bellowbuttoninnerview,
                             { width: '15%' },
                           ]}>
+=======
+                      <View style={{flex: 1, justifyContent: 'center'}}>
+                        <TouchableOpacity style={{alignItems: 'center'}}>
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
                           <Image
-                            source={require('../../../assets/Images/clock.png')}
+                            source={require('../../../assets/Images/cross.png')}
                             resizeMode="contain"
                           />
+<<<<<<< HEAD
                         </View>
                         <View
                           style={[
@@ -175,6 +250,48 @@ const PatientHome = ({ navigation }) => {
               )}
               keyExtractor={(item, index) => index.toString()}
             />
+=======
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <View style={{flex: 1}}>
+                      <View
+                        style={[
+                          styles.belowButtonView,
+                          {paddingLeft: 5, paddingRight: 5},
+                        ]}>
+                        <TouchableOpacity style={styles.belowButton}>
+                          <View
+                            style={[
+                              styles.bellowbuttoninnerview,
+                              {width: '15%'},
+                            ]}>
+                            <Image
+                              source={require('../../../assets/Images/clock.png')}
+                              resizeMode="contain"
+                            />
+                          </View>
+                          <View
+                            style={[
+                              styles.bellowbuttoninnerview,
+                              {width: '85%'},
+                            ]}>
+                            <Text
+                              style={[
+                                styles.belowButtonText,
+                                {marginLeft: 10},
+                              ]}>
+                              {item.timeSlot}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -197,7 +314,11 @@ const PatientHome = ({ navigation }) => {
             }}>
             <FlatList
               data={dataSource}
+<<<<<<< HEAD
               renderItem={({ item }) => (
+=======
+              renderItem={({item}) => (
+>>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
                 <DoctorList data={item} navigation={navigation} />
               )}
               keyExtractor={(item, index) => index.toString()}

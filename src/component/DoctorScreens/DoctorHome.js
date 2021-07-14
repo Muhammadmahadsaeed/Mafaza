@@ -11,9 +11,11 @@ import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import { createDirectory } from '../utils/directory';
 import { askForPermission } from '../utils/permission';
+import {useSelector} from 'react-redux';
 
 const DoctorHome = ({ navigation }) => {
   const [dataSource, setDataSource] = useState([]);
+  const user = useSelector(state => state.user.user);
 
   useEffect(() => {
    
@@ -48,7 +50,7 @@ const DoctorHome = ({ navigation }) => {
         </TouchableOpacity>
         <View style={[styles.rightview, { marginRight: 20 }]}>
           <View style={styles.innerrightview}>
-            <Text style={styles.nametext}>Syed Kashan Tayyab</Text>
+            <Text style={styles.nametext}>{user.data.user.name}</Text>
             <View style={styles.locationView}>
               <Image
                 source={require('../../../assets/Images/location.png')}
