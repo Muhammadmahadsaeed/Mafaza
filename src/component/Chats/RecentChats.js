@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
-  Text, StyleSheet
+  Text, StyleSheet, PermissionsAndroid
 } from 'react-native';
 
+
 const RecentChats = ({ navigation }) => {
+   
   const goToChatRoom = () => {
     navigation.navigate('ChatRoomScreen')
   }

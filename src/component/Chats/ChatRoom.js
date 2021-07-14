@@ -12,22 +12,40 @@ import {
     FlatList,
     BackHandler,
 } from 'react-native';
+import ConversationHeader from './ConversationHeader';
 import InputBox from './InputBox';
-// import Conversation from './conversation';
-
+import Conversation from './Conversation';
 
 const ChatRoom = ({ props }) => {
+
     const flatListRef = useRef(null)
+    const data = [{
+        id: 1,
+        text: 'hi',
+        type: 'text',
+        userId: 2
+    }]
+
     return (
         <View style={{ flex: 1 }}>
-            <View style={styles.innerContainer}>
-                <FlatList style={{ flex: 1 }}
-                    ref={flatListRef}
-                />
-                <InputBox />
+            <ConversationHeader />
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <View style={styles.innerContainer}>
+                    <FlatList style={{ flex: 1, paddingHorizontal: 10 }}
+                        ref={flatListRef}
+                        data={data}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => (
+                            <Conversation
+                                message={item}
+                                index={index.toString()}
+                                myId={1}
+                            />
+                        )}
+                    />
+                    <InputBox />
+                </View>
             </View>
-
-
         </View>
     )
 }
@@ -43,7 +61,7 @@ const styles = StyleSheet.create({
         flex: 1,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        backgroundColor: '#F6F6F6',
+        backgroundColor: '#F2F2F2',
         // paddingHorizontal: 10,
         paddingTop: 20,
     },

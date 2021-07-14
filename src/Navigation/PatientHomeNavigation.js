@@ -1,4 +1,5 @@
 import { createStackNavigator,TransitionPresets } from 'react-navigation-stack';
+import { ChatRoom } from '../component/Chats';
 import * as PatientScreen from '../component/PatientScreens'
 
 const HomeNavigator = createStackNavigator({
@@ -8,7 +9,14 @@ const HomeNavigator = createStackNavigator({
     navigationOptions: {
       headerShown: false
     }
-  }
+  },
+  ChatScreen: {
+    screen: ChatRoom,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+
 },{
   defaultNavigationOptions: {
     ...TransitionPresets.SlideFromRightIOS,

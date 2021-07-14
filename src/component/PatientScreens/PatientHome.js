@@ -33,6 +33,13 @@ const PatientHome = ({navigation}) => {
       });
   }, []);
 
+  // const getDoctors = async () =>{
+  //   await fetch(`${api}patient_chat/contact`,{
+  //     headers: headers
+  //   })
+  //   .then
+  // }
+
   return (
     <View style={styles.container}>
       <View style={styles.uppercontainer}>
@@ -168,6 +175,7 @@ const PatientHome = ({navigation}) => {
                     </View>
                   </View>
                 </TouchableOpacity>
+              
               )}
               keyExtractor={(item, index) => index.toString()}
             />
@@ -262,7 +270,7 @@ export default PatientHome;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.Colors.ScreenBackground,
+    backgroundColor: '#FBFBFB',
     flex: 1,
   },
   uppercontainer: {
