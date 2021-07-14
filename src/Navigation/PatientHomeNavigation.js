@@ -16,7 +16,12 @@ const HomeNavigator = createStackNavigator({
       headerShown: false
     }
   },
-
+  DoctorAppointmentScreen: {
+    screen: PatientScreen.DoctorAppointment,
+    navigationOptions: {
+      headerShown: false
+    }
+  }
 },{
   defaultNavigationOptions: {
     ...TransitionPresets.SlideFromRightIOS,
