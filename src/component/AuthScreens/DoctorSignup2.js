@@ -130,7 +130,7 @@ const DoctorSignUp2 = ({navigation}) => {
             <View style={styles.multiouterview}>
               <Text style={styles.multitext}>Speaciality</Text>
               {speaciality.map((speaciality, index) => (
-                <View style={styles.multiinnerview}>
+                <View style={styles.multiinnerview} key={index}>
                   <TextInput
                     placeholder={'Your Speaciality'}
                     style={[styles.multitextinput, {width: '80%'}]}
@@ -169,7 +169,7 @@ const DoctorSignUp2 = ({navigation}) => {
             <View style={styles.multiouterview}>
               <Text style={styles.multitext}>Qualificatiions</Text>
               {qualifications.map((Qualificatiions, index) => (
-                <View style={styles.multiinnerview}>
+                <View style={styles.multiinnerview} key={index}>
                   <TextInput
                     placeholder={'Degree'}
                     style={styles.multitextinput}
@@ -220,7 +220,7 @@ const DoctorSignUp2 = ({navigation}) => {
             <View style={styles.multiouterview}>
               <Text style={styles.multitext}>Experience</Text>
               {experience.map((Experience, index) => (
-                <View style={styles.multiinnerview}>
+                <View style={styles.multiinnerview} key={index}>
                   <TextInput
                     placeholder={'Designation'}
                     style={styles.multitextinput}
