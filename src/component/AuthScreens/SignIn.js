@@ -8,22 +8,40 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import PhoneInput from 'react-native-phone-number-input';
+import {api, headers} from '../Config/env';
+import {useDispatch} from 'react-redux';
 
 const SignIn = ({navigation}) => {
+  const dispatch = useDispatch();
+  const mapDispatchToProps = (value) => {
+    dispatch({type: 'SET_USER', payload: value});
+  };
+
   const [formattedValue, setFormattedValue] = useState('');
   const [wrongnum, setwrongnum] = useState(false);
   const [correctnum, setcorrectnum] = useState(false);
   const [num, setnum] = useState('');
+  const [loading, setLoading] = useState(false);
   const phoneInput = useRef('');
   const [password, setpassword] = useState('');
   const [showpassword, setshowpassword] = useState(true);
   const [errortext, seterrortext] = useState('');
 
-
+  const storeData = (users) => {
+    setLoading(false);
+    mapDispatchToProps(users);
+    if(users.data.user.role == 'DOCTOR'){
+      navigation.navigate('DoctorHomeScreen');
+    }
+    else if(users.data.user.role == 'PATIENT'){
+      navigation.navigate('PatientHomeScreen');
+    }
+  };
   const checkNumber = (text) => {
     const checkValid = phoneInput.current?.isValidNumber(text);
     if (checkValid) {
@@ -39,7 +57,41 @@ const SignIn = ({navigation}) => {
   const displayonoffpassword = () => {
     setshowpassword(!showpassword);
   };
- 
+  const Handle = () => {
+    seterrortext('');
+    if (num != '' && correctnum == true) {
+      if (password > 6) {
+        setLoading(true);
+        fetch(`${api}auth/login`, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({
+            phone_no: formattedValue,
+            password: password,
+          }),
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            setLoading(false);
+            console.log(responseJson);
+            if (responseJson.status == 1) {
+              storeData(responseJson);
+            } else if (responseJson.status == 0) {
+              seterrortext(responseJson.message);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            setLoading(false);
+            seterrortext('Check Your Internet Connection');
+          });
+      } else {
+        seterrortext('Password cannot be less then 6');
+      }
+    } else {
+      seterrortext('Enter correct number');
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView
@@ -62,7 +114,7 @@ const SignIn = ({navigation}) => {
               Enter the values to Sign Up and got your problem solved with
               Mafaza certified Doctors
             </Text>
-            
+
             <View style={styles.SectionStyle}>
               <Image
                 source={require('../../../assets/Images/phone.png')}
@@ -131,18 +183,28 @@ const SignIn = ({navigation}) => {
               </TouchableOpacity>
             </View>
 
-            <View style={{flexDirection:'row',marginTop:10,justifyContent:"flex-end"}}>
-              <TouchableOpacity style={{height:30}} onPress={()=>navigation.navigate("ForgetPassNumberScreen")}>
-               <Text style={styles.Ortext}>Forget Password?</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 10,
+                justifyContent: 'flex-end',
+              }}>
+              <TouchableOpacity
+                style={{height: 30}}
+                onPress={() => navigation.navigate('ForgetPassNumberScreen')}>
+                <Text style={styles.Ortext}>Forget Password?</Text>
               </TouchableOpacity>
             </View>
-            
+
             <View>
               <Text style={styles.txtstyle}>{errortext}</Text>
             </View>
-            <TouchableOpacity
-              style={styles.Btndesign}>
-              <Text style={styles.Btntext}>Login</Text>
+            <TouchableOpacity onPress={() => Handle()} style={styles.Btndesign}>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.Btntext}>Login</Text>
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -269,6 +331,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: font.fonts.PoppinsRegular,
     color: color.Colors.Blue,
-    textDecorationLine: 'underline'
-  }
+    textDecorationLine: 'underline',
+  },
 });

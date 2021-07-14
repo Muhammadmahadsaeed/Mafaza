@@ -11,7 +11,7 @@ const SelectOption = ({navigation}) => {
         style={{width: '50%', height: 200, resizeMode: 'contain'}}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate('DoctorSignUp2Screen')}
+        onPress={() => navigation.navigate('DoctorSignUp1Screen')}
         style={styles.Btndesign}>
         <Text style={styles.Btntext}>Sign Up as a Doctor</Text>
       </TouchableOpacity>

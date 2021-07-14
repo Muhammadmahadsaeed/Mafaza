@@ -135,9 +135,7 @@ const DoctorSignup3 = ({navigation}) => {
   };
   async function signInWithPhoneNumber() {
     try {
-      const confirmation = await auth().signInWithPhoneNumber(
-        DoctorData.DoctorNumber,
-      );
+      const confirmation = await auth().signInWithPhoneNumber(DoctorData.DoctorNumber);
       setLoading(false)
       navigation.navigate('DoctorOtpScreen', {
         DoctorData: DoctorData,

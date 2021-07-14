@@ -35,7 +35,6 @@ const PatientOtp = ({navigation}) => {
   };
 
   const HandlePatient = () => {
-    PatientData.Role = 'PATIENT';
     fetch(`${api}patient/register`, {
       method: 'POST',
       headers: headers,
@@ -47,9 +46,8 @@ const PatientOtp = ({navigation}) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         if (responseJson.status == 1) {
-          storeData(PatientData);
+          storeData(responseJson);
         } else {
           seterrortext('Ckeck your Internet connection');
         }

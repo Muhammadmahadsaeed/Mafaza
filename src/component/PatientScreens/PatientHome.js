@@ -9,14 +9,28 @@ import {
 } from 'react-native';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
+import {api, headers} from '../Config/env';
 
 const PatientHome = ({navigation}) => {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos')
+    fetch(`${api}admin/find/doctor/approved`, {
+      method: 'GET',
+      headers: headers,
+    })
       .then((response) => response.json())
-      .then((json) => setDataSource(json));
+      .then((responseJson) => {
+        console.log("-0-------------------");
+        console.log(responseJson);
+        if (responseJson.status == 1) {
+          setDataSource(responseJson.data);
+          console.log(dataSource,'==================');
+        } 
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -198,8 +212,24 @@ const PatientHome = ({navigation}) => {
                     />
                   </View>
                   <View style={{flex: 3}}>
-                    <Text style={{fontFamily:fonts.fonts.PoppinsRegular,fontSize:16,marginTop:10,marginLeft:5}}>Dr. Zainab Abbasi</Text>
-                    <Text style={{fontFamily:fonts.fonts.PoppinsRegular,fontSize:14,marginLeft:5,color:colors.Colors.Gray}}>Heart Surgeon</Text>
+                    <Text
+                      style={{
+                        fontFamily: fonts.fonts.PoppinsRegular,
+                        fontSize: 16,
+                        marginTop: 10,
+                        marginLeft: 5,
+                      }}>
+                      {item.name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: fonts.fonts.PoppinsRegular,
+                        fontSize: 14,
+                        marginLeft: 5,
+                        color: colors.Colors.Gray,
+                      }}>
+                      {item.designation}
+                    </Text>
                   </View>
                   <View
                     style={{
@@ -209,7 +239,7 @@ const PatientHome = ({navigation}) => {
                     <Image
                       source={require('../../../assets/Images/cross.png')}
                       resizeMode="contain"
-                      style={{position:'absolute',top:-20}}
+                      style={{position: 'absolute', top: -20}}
                     />
                     <TouchableOpacity style={{bottom: 7, position: 'absolute'}}>
                       <Image

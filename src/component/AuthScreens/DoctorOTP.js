@@ -35,12 +35,11 @@ const DoctorOTP = ({navigation}) => {
   };
 
   const HandleDoctor = () => {
-    DoctorData.Role = 'DOCTOR';
     fetch(`${api}doctor/register`, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({
-        experience: DoctorExperienceYears,
+        experience: DoctorData.DoctorExperienceYears,
         medical_no: DoctorData.DoctorMedicalNumber,
         name: DoctorData.DoctorName,
         phone_no: DoctorData.DoctorNumber,
@@ -65,7 +64,8 @@ const DoctorOTP = ({navigation}) => {
       .then((responseJson) => {
         if (responseJson.status == 1) {
           setLoading(false)
-          storeData(DoctorData);
+          console.log(responseJson);
+          storeData(responseJson);
         } else {
           setLoading(false)
           seterrortext('Ckeck your Internet connection');

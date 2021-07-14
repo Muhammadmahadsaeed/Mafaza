@@ -189,6 +189,7 @@ const DoctorHome = ({navigation}) => {
                   color: '#FD872C',
                   fontSize: 16,
                   fontFamily: fonts.fonts.PoppinsRegular,
+                  textAlign:'center'
                 }}>
                 Past Appointments
               </Text>
@@ -208,6 +209,7 @@ const DoctorHome = ({navigation}) => {
                   color: '#FF4238',
                   fontSize: 16,
                   fontFamily: fonts.fonts.PoppinsRegular,
+                  textAlign:'center'
                 }}>
                 Cancel Appointments
               </Text>

@@ -5,12 +5,11 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  TextInput,
   ScrollView,
-  Linking,
 } from 'react-native';
 import colors from '../constants/colors';
 import fonts from '../constants/fonts';
+import { connect } from 'react-redux';
 
 class CustomPatientDrawer extends Component {
   constructor() {
@@ -30,14 +29,17 @@ class CustomPatientDrawer extends Component {
       ],
     };
   }
-  componentDidMount() {}
-
   navigateedit(text) {
     this.props.navigation.toggleDrawer();
     this.props.navigation.navigate(text);
   }
   logout = async () => {
-    console.log('Logout');
+    try {
+      this.props.removeUser(null);
+      this.setState({name: ''});
+      this.props.navigation.navigate('SignInScreen');
+    } catch (error) {
+    }
   };
 
   render() {
@@ -87,7 +89,7 @@ class CustomPatientDrawer extends Component {
                     />
                   </View>
                   <View style={styles.innerrightview}>
-                    <Text style={styles.nametext}>Syed Kashan Tayyab</Text>
+                    <Text style={styles.nametext}>{this.props.user.user.data.user.name}</Text>
                     <TouchableOpacity
                       style={[
                         styles.updateView,
@@ -225,4 +227,15 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CustomPatientDrawer;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeUser: (RemoveUser) =>
+      dispatch({type: 'REMOVE_USER', payload: RemoveUser}),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CustomPatientDrawer);

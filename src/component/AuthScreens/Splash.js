@@ -11,13 +11,13 @@ const SplashScreen = ({navigation}) => {
     setTimeout(() => {
       setAnimating(false);
       if (user) {
-        if (user.Role == 'PATIENT') {
+        if (user.data.user.role == 'PATIENT') {
           navigation.navigate('PatientHomeScreen');
-        } else if (user.Role == 'DOCTOR') {
+        } else if (user.data.user.role== 'DOCTOR') {
           navigation.navigate('DoctorHomeScreen');
         }
       } else {
-        navigation.navigate('AuthScreens');
+        navigation.navigate('SelectOptionScreen');
       }
     }, 3000);
   }, []);
