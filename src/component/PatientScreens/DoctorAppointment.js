@@ -15,7 +15,7 @@ import fonts from '../../constants/fonts';
 import {api, headers} from '../Config/env';
 import {useSelector} from 'react-redux';
 
-const DoctorProfile = ({navigation}) => {
+const DoctorAppointment = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [timeSlot, settimeSlot] = useState('');
   const [consultation_purpose, setconsultation_purpose] = useState('');
@@ -159,7 +159,7 @@ const DoctorProfile = ({navigation}) => {
   );
 };
 
-export default DoctorProfile;
+export default DoctorAppointment;
 
 const styles = StyleSheet.create({
   container: {

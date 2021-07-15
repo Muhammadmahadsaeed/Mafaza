@@ -21,6 +21,12 @@ const HomeNavigator = createStackNavigator({
     navigationOptions: {
       headerShown: false
     }
+  },
+  DoctorProfileScreen: {
+    screen: PatientScreen.DoctorProfile,
+    navigationOptions: {
+      headerShown: false
+    }
   }
 },{
   defaultNavigationOptions: {

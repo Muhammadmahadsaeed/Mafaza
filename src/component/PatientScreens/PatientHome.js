@@ -19,20 +19,12 @@ const PatientHome = ({ navigation }) => {
   const user = useSelector(state => state.user.user);
 
   useEffect(() => {
-<<<<<<< HEAD
     getDoctors()
+    getAppointments()
   }, []);
 
   const getDoctors = async () => {
     await fetch(`${api}admin/find/doctor/approved`, {
-=======
-    getDoctors();
-    getAppointments();
-  }, []);
-
-  const getDoctors = () => {
-    fetch(`${api}admin/find/doctor/approved`, {
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
       method: 'GET',
       headers: headers,
     })
@@ -40,18 +32,11 @@ const PatientHome = ({ navigation }) => {
       .then((responseJson) => {
         if (responseJson.status == 1) {
           setDataSource(responseJson.data);
-<<<<<<< HEAD
-
-=======
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
         }
       })
       .catch((error) => {
         console.log(error);
       });
-<<<<<<< HEAD
-  }
-=======
   };
   const getAppointments = () => {
     fetch(`${api}appointment/show`, {
@@ -71,7 +56,6 @@ const PatientHome = ({ navigation }) => {
         console.log(error);
       });
   };
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
 
   return (
     <View style={styles.container}>
@@ -134,36 +118,6 @@ const PatientHome = ({ navigation }) => {
               paddingRight: 20,
               paddingTop: 10
             }}>
-<<<<<<< HEAD
-            <FlatList
-              data={dataSource}
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.FlatListTouchButton}>
-                  <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <View style={{ flex: 3 }}>
-                      <View style={[styles.rightview]}>
-                        <View
-                          style={[
-                            styles.DoctorImageView,
-                            { marginLeft: 10, borderColor: 'white' },
-                          ]}>
-                          <Image
-                            source={require('../../../assets/Images/doctor.png')}
-                            resizeMode="stretch"
-                            style={styles.DoctorImage}
-                          />
-                        </View>
-                        <View style={styles.innerrightview}>
-                          <Text style={[styles.nametext, { color: 'white' }]}>
-                            Syed Kashan Tayyab
-                          </Text>
-                          <Text
-                            style={[
-                              styles.nametext,
-                              { fontSize: 12, color: 'white' },
-=======
               <FlatList
                 data={Appointments}
                 showsHorizontalScrollIndicator={false}
@@ -177,7 +131,6 @@ const PatientHome = ({ navigation }) => {
                             style={[
                               styles.DoctorImageView,
                               {marginLeft: 10, borderColor: 'white'},
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
                             ]}>
                             <Image
                               source={require('../../../assets/Images/doctor.png')}
@@ -199,58 +152,12 @@ const PatientHome = ({ navigation }) => {
                           </View>
                         </View>
                       </View>
-<<<<<<< HEAD
-                    </View>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                      <TouchableOpacity style={{ alignItems: 'center' }}>
-                        <Image
-                          source={require('../../../assets/Images/cross.png')}
-                          resizeMode="contain"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <View
-                      style={[
-                        styles.belowButtonView,
-                        { paddingLeft: 5, paddingRight: 5 },
-                      ]}>
-                      <TouchableOpacity style={styles.belowButton}>
-                        <View
-                          style={[
-                            styles.bellowbuttoninnerview,
-                            { width: '15%' },
-                          ]}>
-=======
                       <View style={{flex: 1, justifyContent: 'center'}}>
                         <TouchableOpacity style={{alignItems: 'center'}}>
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
                           <Image
                             source={require('../../../assets/Images/cross.png')}
                             resizeMode="contain"
                           />
-<<<<<<< HEAD
-                        </View>
-                        <View
-                          style={[
-                            styles.bellowbuttoninnerview,
-                            { width: '85%' },
-                          ]}>
-                          <Text
-                            style={[styles.belowButtonText, { marginLeft: 10 }]}>
-                            Sunday 6-Jan 2022
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
-=======
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -291,7 +198,6 @@ const PatientHome = ({ navigation }) => {
                 )}
                 keyExtractor={(item, index) => index.toString()}
               />
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -314,11 +220,7 @@ const PatientHome = ({ navigation }) => {
             }}>
             <FlatList
               data={dataSource}
-<<<<<<< HEAD
-              renderItem={({ item }) => (
-=======
               renderItem={({item}) => (
->>>>>>> b76d675a4a394544df5a65cd66bc8204ac3d59b0
                 <DoctorList data={item} navigation={navigation} />
               )}
               keyExtractor={(item, index) => index.toString()}
