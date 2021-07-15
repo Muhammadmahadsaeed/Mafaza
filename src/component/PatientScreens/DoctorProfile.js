@@ -16,16 +16,12 @@ import {api, headers} from '../Config/env';
 import {useSelector} from 'react-redux';
 
 const DoctorProfile = ({navigation}) => {
-  const [loading, setLoading] = useState(false);
-  const [timeSlot, settimeSlot] = useState('');
-  const [consultation_purpose, setconsultation_purpose] = useState('');
-  const [message, setmessage] = useState('');
   const [errortext, seterrortext] = useState('');
   const user = useSelector((state) => state.user.user);
   const DoctorData = navigation.getParam('doctorData');
 
   const HandleAppointment = () => {
-    seterrortext('');
+    console.log(DoctorData);
   };
   const goToChatRoom = () => {
     const data = DoctorData;
@@ -70,18 +66,88 @@ const DoctorProfile = ({navigation}) => {
                 <View style={styles.textviewbox}>
                   <View style={styles.textbox}>
                     <View style={{flex: 1, justifyContent: 'center'}}>
-                      <Text style={styles.text1}>Dr Minahil Zaidi</Text>
-                      <Text style={styles.text2}>Designation</Text>
+                      <Text style={styles.text1}>{DoctorData.name}</Text>
+                      <Text style={styles.text2}>{DoctorData.designation}</Text>
                     </View>
-                    <View style={{flex: 1}}>
-                      <Text style={styles.text1}>10 Years</Text>
-                      <Text style={styles.text2}>Experience</Text>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View style={{flex: 1, justifyContent: 'center'}}>
+                        <Image
+                          source={require('../../../assets/Images/patients.png')}
+                          resizeMode="contain"
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flex: 3,
+                          justifyContent: 'center',
+                        }}>
+                        <Text
+                          style={[
+                            styles.text1,
+                            {fontFamily: fonts.fonts.PoppinsMedium},
+                          ]}>
+                          200
+                        </Text>
+                        <Text
+                          style={[styles.text2, {color: colors.Colors.Orange}]}>
+                          Patients
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View style={{flex: 1, justifyContent: 'center'}}>
+                        <Image
+                          source={require('../../../assets/Images/experience.png')}
+                          resizeMode="contain"
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flex: 3,
+                          justifyContent: 'center',
+                        }}>
+                        <Text
+                          style={[
+                            styles.text1,
+                            {fontFamily: fonts.fonts.PoppinsMedium},
+                          ]}>
+                          {DoctorData.experience} Years
+                        </Text>
+                        <Text style={styles.text2}>Experience</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
-              <View>
-                <Text style={styles.txtstyle}>{errortext}</Text>
+              <View style={styles.lowerview}>
+                <Text style={styles.detailsText}>
+                  Details
+                </Text>
+                <View style={{width:'100%',height:60,flexDirection:'row',marginTop:20}}>
+                      <View style={{flex: 1, alignItems: 'center',justifyContent:'center',backgroundColor:'green'}}>
+                        <Image
+                          source={require('../../../assets/Images/patients.png')}
+                          resizeMode="contain"
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flex: 5,
+                          justifyContent: 'center',
+                        }}>
+                        <Text
+                          style={[
+                            styles.text1,
+                            {fontFamily: fonts.fonts.PoppinsMedium},
+                          ]}>
+                          200
+                        </Text>
+                        <Text
+                          style={[styles.text2, {color: colors.Colors.Orange}]}>
+                          Patients
+                        </Text>
+                      </View>
+                </View>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -89,11 +155,7 @@ const DoctorProfile = ({navigation}) => {
         <TouchableOpacity
           onPress={() => HandleAppointment()}
           style={styles.Btndesign}>
-          {loading ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            <Text style={styles.Btntext}>Make Appointment</Text>
-          )}
+          <Text style={styles.Btntext}>Make Appointment</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -180,12 +242,24 @@ const styles = StyleSheet.create({
   },
   text2: {
     fontFamily: fonts.fonts.PoppinsMedium,
-    fontSize: 14,
+    fontSize: 12,
     color: colors.Colors.Blue,
   },
   upperview: {
     width: '100%',
     height: 250,
     flexDirection: 'row',
+    backgroundColor: 'pink',
+  },
+  lowerview: {
+    flex: 1,
+    paddingLeft: 20,
+    paddingRight: 10,
+  },
+  detailsText: {
+    marginTop: 20,
+    color: colors.Colors.Blue,
+    fontFamily: fonts.fonts.PoppinsBold,
+    fontSize: 16,
   },
 });

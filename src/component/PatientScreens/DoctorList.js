@@ -15,7 +15,7 @@ const DoctorList = ({navigation, data}) => {
     navigation.navigate('ChatScreen',{data});
   };
   const goToDoctorProfile = (item) => {
-    navigation.navigate('DoctorProfileScreen',{
+    navigation.navigate('DoctorAppointmentScreen',{
         doctorData:item
     });
   };

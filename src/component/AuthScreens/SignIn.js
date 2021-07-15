@@ -60,7 +60,7 @@ const SignIn = ({navigation}) => {
   const Handle = () => {
     seterrortext('');
     if (num != '' && correctnum == true) {
-      if (password > 6) {
+      if (password.length > 6) {
         setLoading(true);
         fetch(`${api}auth/login`, {
           method: 'POST',

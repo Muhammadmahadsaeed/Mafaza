@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {api, headers} from '../Config/env';
 import {useSelector} from 'react-redux';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const DoctorAppointment = ({navigation}) => {
   const [loading, setLoading] = useState(false);
@@ -22,14 +23,33 @@ const DoctorAppointment = ({navigation}) => {
   const [message, setmessage] = useState('');
   const [errortext, seterrortext] = useState('');
   const user = useSelector((state) => state.user.user);
-  const DoctorData = navigation.getParam('doctorData')
+  const [gettimeslot, setgettimeslot] = useState([]);
+  const DoctorData = navigation.getParam('doctorData');
+
+  useEffect(() => {
+    fetch(`${api}appointment/getfree/slots`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        doctorId: "60efc2076627c50efc476baa",
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == 1) {
+          setgettimeslot(responseJson.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const HandleAppointment = () => {
-    seterrortext('')
+    seterrortext('');
     if (timeSlot != '') {
-      if(consultation_purpose != '')
-      {
-        setLoading(true)
+      if (consultation_purpose != '') {
+        setLoading(true);
         fetch(`${api}appointment/add`, {
           method: 'POST',
           headers: headers,
@@ -40,17 +60,17 @@ const DoctorAppointment = ({navigation}) => {
             consultation_purpose: consultation_purpose,
             patientId: user.data.user._id,
             doctorId: DoctorData._id,
-            message:message
+            message: message,
           }),
         })
           .then((response) => response.json())
           .then((responseJson) => {
             if (responseJson.status == 1) {
               setLoading(false);
-              settimeSlot('')
-              setconsultation_purpose('')
-              setmessage('')
-              alert("Your appointment have been booked")
+              settimeSlot('');
+              setconsultation_purpose('');
+              setmessage('');
+              alert('Your appointment have been booked');
             } else {
               setLoading(false);
               seterrortext('Ckeck your Internet connection');
@@ -61,15 +81,16 @@ const DoctorAppointment = ({navigation}) => {
             setLoading(false);
             seterrortext('Ckeck your Internet connection');
           });
+      } else {
+        seterrortext('Enter Consultation Purpose');
       }
-      else
-      {
-        seterrortext('Enter Consultation Purpose')
-      }
-    
     } else {
-      seterrortext('Enter time slot');
+      seterrortext('Select time slot');
     }
+  };
+  const goToChatRoom = () => {
+    const data = DoctorData;
+    navigation.navigate('ChatScreen', {data});
   };
   return (
     <View style={styles.container}>
@@ -85,7 +106,7 @@ const DoctorAppointment = ({navigation}) => {
         <Text style={styles.uppertext}>Appointment</Text>
         <TouchableOpacity
           style={[styles.HamburgerView, {marginRight: 20}]}
-          onPress={() => navigation.navigate('ChatScreen')}>
+          onPress={() => goToChatRoom()}>
           <Image
             source={require('../../../assets/Images/bluemessage.png')}
             resizeMode="contain"
@@ -100,17 +121,38 @@ const DoctorAppointment = ({navigation}) => {
           }}>
           <KeyboardAvoidingView enabled>
             <View style={styles.innerView}>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Enter Time Slot"
-                  autoCapitalize="none"
-                  keyboardType="decimal-pad"
-                  value={timeSlot}
-                  returnKeyType="next"
-                  underlineColorAndroid="#f000"
-                  blurOnSubmit={false}
-                  onChangeText={(text) => settimeSlot(text)}
+              <View
+                style={{
+                  ...(Platform.OS == 'ios' && {
+                    zIndex: 10,
+                  }),
+                  width: '100%',
+                  marginTop: 20,
+
+                }}>
+                <DropDownPicker
+                  items={[
+                    {label: 'Mafaza Patient', value: 'Mafaza Patient'},
+                    {label: 'Personal Patient', value: 'Personal Patient'},
+                    {label: 'Both', value: 'Both'},
+                  ]}
+                  placeholder="Select Time Slot"
+                  selectedLabelStyle={{color: 'black'}}
+                  placeholderStyle={{
+                    color: '#9EA0A4',
+                  }}
+                  containerStyle={{height: 56, width: '100%'}}
+                  style={{
+                    backgroundColor: '#fafafa',
+                    borderColor: colors.Colors.Blue,
+                    borderRadius: 4,
+                    color: '#000',
+                  }}
+                  itemStyle={{
+                    justifyContent: 'flex-start',
+                  }}
+                  dropDownStyle={{backgroundColor: '#fafafa'}}
+                  onChangeItem={(item) => settimeSlot(item.value)}
                 />
               </View>
               <View style={styles.inputContainer}>
@@ -118,7 +160,7 @@ const DoctorAppointment = ({navigation}) => {
                   style={styles.inputStyle}
                   placeholder="Enter Consultation Purpose"
                   autoCapitalize="none"
-                  keyboardType='ascii-capable'
+                  keyboardType="ascii-capable"
                   returnKeyType="next"
                   value={consultation_purpose}
                   underlineColorAndroid="#f000"
@@ -131,7 +173,7 @@ const DoctorAppointment = ({navigation}) => {
                   style={[styles.inputStyle, {textAlign: 'justify'}]}
                   placeholder="Enter Message (Optional)"
                   autoCapitalize="none"
-                  keyboardType='ascii-capable'
+                  keyboardType="ascii-capable"
                   returnKeyType="next"
                   value={message}
                   underlineColorAndroid="#f000"
