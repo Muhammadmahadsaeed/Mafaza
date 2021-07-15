@@ -58,22 +58,25 @@ const SignIn = ({navigation}) => {
     setshowpassword(!showpassword);
   };
   const Handle = () => {
+
     seterrortext('');
-    if (num != '' && correctnum == true) {
-      if (password > 6) {
+    if (num != '' && correctnum) {
+      if (password.length >= 6) {
+        console.log(formattedValue);
         setLoading(true);
         fetch(`${api}auth/login`, {
           method: 'POST',
           headers: headers,
           body: JSON.stringify({
             phone_no: formattedValue,
+            // phone_no: num,
             password: password,
           }),
         })
           .then((response) => response.json())
           .then((responseJson) => {
+       
             setLoading(false);
-            console.log(responseJson);
             if (responseJson.status == 1) {
               storeData(responseJson);
             } else if (responseJson.status == 0) {

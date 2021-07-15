@@ -5,21 +5,25 @@ import fonts from '../../constants/fonts';
 const Conversation = ({ message, myId }) => {
     const { type } = message
 
+    const isMyMessage = () => {
+        return message.senderId === myId;
+    };
+
     return (
         <TouchableOpacity activeOpacity={0.9}
             style={[
                 styles.messageBox,
                 {
-                    backgroundColor: myId ? '#FFFFFF' : '#136EE3',
-                    marginLeft: myId ? 50 : 0,
-                    marginRight: myId ? 0 : 50,
-                    marginVertical: myId ? 5 : 5,
+                    backgroundColor: isMyMessage() ? '#FFFFFF' : '#136EE3',
+                    marginLeft: isMyMessage() ? 50 : 0,
+                    marginRight: isMyMessage() ? 0 : 50,
+                    marginVertical: isMyMessage() ? 5 : 5,
                 },
             ]}
         >
             {type == 'text' && (
                 <View>
-                    <Text style={styles.message}>{message.messageText}</Text>
+                    <Text style={[styles.message,{color: isMyMessage() ? '#212121' : 'white'}]}>{message.messageText}</Text>
                     {/* <Text style={styles.time}>{moment(message.sendTime).fromNow()}</Text> */}
                 </View>
             )}
@@ -41,6 +45,6 @@ const styles = StyleSheet.create({
     message: {
         fontFamily: fonts.fonts.PoppinsMedium,
         fontSize: 18,
-        color: '#212121',
+       
     },
 })

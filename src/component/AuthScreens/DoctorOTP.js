@@ -79,13 +79,14 @@ const DoctorOTP = ({navigation}) => {
     setLoading(true);
     if (code.length == 6) {
       seterrortext('');
-      try {
-        await confirm.confirm(code);
+      // try {
+      //   await confirm.confirm(code);
         HandleDoctor();
-      } catch (error) {
-        setLoading(false);
-        seterrortext('Invalid Code');
-      }
+      // } catch (error) {
+      //   setLoading(false);
+      //   seterrortext('Invalid Code');
+      //   console.log(error)
+      // }
     } else {
       setLoading(false);
       seterrortext('code less then 6');

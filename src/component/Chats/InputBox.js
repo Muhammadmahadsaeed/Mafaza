@@ -186,7 +186,7 @@ class InputBox extends React.Component {
                     />
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity style={styles.iconContainer}
-                            activeOpacity={0.8}>
+                            activeOpacity={0.8} onPress={() => this.props.openAttachmentModal()}>
                             <View style={styles.buttonContainer}>
                                 <Image
                                     source={require('../../../assets/Images/attachment.png')}
