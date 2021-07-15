@@ -21,7 +21,8 @@ const DoctorHome = ({ navigation }) => {
    
     fetch('https://jsonplaceholder.typicode.com/todos')
       .then((response) => response.json())
-      .then((json) => setDataSource(json));
+      .then((json) => setDataSource(json))
+      .catch((err) => console.log(err))
       checkPermission()
   }, []);
 

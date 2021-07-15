@@ -11,6 +11,7 @@ import { api } from '../Config/env';
 const RecentChats = ({ navigation }) => {
 
   const [data, setData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const user = useSelector((state) => state.user.user.data.user);
   const flatListRef = useRef(null)
 
@@ -29,7 +30,7 @@ const RecentChats = ({ navigation }) => {
     })
       .then(res => res.json())
       .then((responseJson) => {
-
+        setIsLoading(false)
         setData(responseJson.data)
       })
       .catch(err => {
@@ -38,8 +39,6 @@ const RecentChats = ({ navigation }) => {
 
   }
   const renderItemComponent = ({ item }) => {
-
-
     return (
       <TouchableOpacity style={styles.row} activeOpacity={0.9} onPress={() => goToChatRoom(item)}>
         <View style={styles.left}>
@@ -86,7 +85,7 @@ const RecentChats = ({ navigation }) => {
         // onChangeText={(e) => searchUser(e)}
         />
       </View>
-      {data.length ?
+      {data.length && !isLoading ?
         <FlatList style={{ flex: 1, paddingHorizontal: 10 }}
           ref={flatListRef}
           data={data}
@@ -99,7 +98,11 @@ const RecentChats = ({ navigation }) => {
           <ActivityIndicator color="black" size="large" />
         </View>
       }
-
+      {!data.length && !isLoading &&
+        <View style={styles.loadingContainer}>
+         <Text> No Recent Chats</Text>
+        </View>
+      }
     </View>
   );
 };
@@ -194,9 +197,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   loadingContainer: {
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-  
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+
   }
 })
