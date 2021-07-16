@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import ImagePicker, { clean } from 'react-native-image-crop-picker';
+import uuid from 'react-native-uuid';
 import { useMutation, gql, useLazyQuery, useSubscription, useQuery } from '@apollo/client';
 import { GET_MESSAGES, SEND_MESSAGE, NEW_MESSAGE } from './Query';
 import ConversationHeader from './ConversationHeader';
@@ -39,7 +41,7 @@ const ChatRoom = ({ navigation }) => {
             receiverId: converstion._id
         }
     })
-    
+
     useEffect(() => {
         setReceiverId(converstion._id)
         setSenderId(user._id)
@@ -48,6 +50,7 @@ const ChatRoom = ({ navigation }) => {
             setData([])
             setReceiverId('')
             setSenderId('')
+            ImagePicker.clean()
         }
     }, [])
 
@@ -82,7 +85,6 @@ const ChatRoom = ({ navigation }) => {
     }, [messageError, data])
 
     const getDataFromInput = async (msg) => {
-
         if (msg.type == "text") {
             setData([...getData, msg])
             sendMessage({
@@ -102,26 +104,24 @@ const ChatRoom = ({ navigation }) => {
     };
     const openAttachmentModal = () => {
         refRBSheet.current.open();
-      };
+    };
     const renderContent = () => (
         <View style={{ flex: 1 }}>
             <View
                 style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-evenly',
+                    // justifyContent: 'space-evenly',
+                    alignItems: 'flex-start',
                     marginVertical: 10,
                 }}>
+
+                <TouchableOpacity style={{  padding: 20, }}
+                    onPress={selectImage}
+                    activeOpacity={0.8}>
+                    <Image source={require('../../../assets/Images/icon-gallery.png')} />
+                </TouchableOpacity>
+
                 {/* <View>
-              <TouchableOpacity
-                onPress={selectImage}
-                activeOpacity={0.8}>
-                <Image
-                  source={require('../../../asessts/images/gallery-icon.png')}
-                />
-              </TouchableOpacity>
-            </View>
-    
-            <View>
               <TouchableOpacity
                 onPress={selectDocument}
                 activeOpacity={0.8}>
@@ -138,6 +138,56 @@ const ChatRoom = ({ navigation }) => {
             </View>
         </View>
     );
+    const selectImage = () => {
+        refRBSheet.current.close();
+        ImagePicker.openPicker({
+            multiple: true,
+            includeBase64: true,
+            compressImageQuality: 0.8,
+            maxFiles: 5,
+            compressImageMaxHeight: 400,
+            compressImageMaxWidth: 300,
+            mediaType: 'photo',
+        })
+            .then((images) => {
+                if (images.length > 5) {
+                    alert("Can't share more then 5 media items.")
+                } else {
+                    let arrForServer = images.map((item) => {
+                        const imageName = item.path.split('/').pop();
+                        let img = {
+                            name: imageName,
+                            type: item.mime,
+                            uri:
+                                Platform.OS === 'android'
+                                    ? item.path
+                                    : item.path.replace('file://', ''),
+                        };
+                        return img;
+                    });
+                    let arrForRender = images.map((item) => {
+                        let base64 = `data:${item.mime};base64,${item.data}`;
+                        let image = {
+                            url: base64
+                        }
+                        return image
+                    })
+                    let messageObj = {
+                        messageId: uuid.v4(),
+                        userName: "mahad",
+                        senderId: senderId,
+                        receiverId: receiverId,
+                        type: 'image',
+                        isSending: true,
+                        imagesObj: arrForServer,
+                        content: arrForRender,
+                        sendTime: Date.now()
+                    };
+                    getDataFromInput(messageObj);
+                }
+            })
+            .catch((err) => console.log(err));
+    };
     return (
         <View style={{ flex: 1 }}>
             <ConversationHeader navigation={navigation} />
@@ -146,8 +196,8 @@ const ChatRoom = ({ navigation }) => {
                     <FlatList style={{ flex: 1, paddingHorizontal: 10 }}
                         ref={flatListRef}
                         data={getData}
-                        onContentSizeChange={() => flatListRef.current.scrollToEnd({animating: true})}
-                        onLayout={() => flatListRef.current.scrollToEnd({animating: true})}
+                        onContentSizeChange={() => flatListRef.current.scrollToEnd({ animating: true })}
+                        onLayout={() => flatListRef.current.scrollToEnd({ animating: true })}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
                             <Conversation
