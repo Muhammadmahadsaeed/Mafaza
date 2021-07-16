@@ -146,7 +146,8 @@ const ChatRoom = ({ navigation }) => {
                     <FlatList style={{ flex: 1, paddingHorizontal: 10 }}
                         ref={flatListRef}
                         data={getData}
-                        // inverted
+                        onContentSizeChange={() => flatListRef.current.scrollToEnd({animating: true})}
+                        onLayout={() => flatListRef.current.scrollToEnd({animating: true})}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
                             <Conversation

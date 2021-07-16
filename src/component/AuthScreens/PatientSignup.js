@@ -148,15 +148,6 @@ const PatientSignUp = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('SelectOptionScreen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Sign Up</Text>
-            </TouchableOpacity>
             <Text style={styles.Infotext}>
               Enter the values to Sign Up and got your problem solved with
               Mafaza ceryified Doctors

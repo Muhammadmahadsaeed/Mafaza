@@ -202,15 +202,6 @@ const DoctorSignup1 = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('SelectOptionScreen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Step 1 of 6 - Create Profile</Text>
-            </TouchableOpacity>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputStyle}

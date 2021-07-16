@@ -89,31 +89,31 @@ class InputBox extends React.Component {
         }
     };
     onStartRecording = async () => {
-        try {
-            const dirAudio = await getAudioFolderPath()
-            this.setState({ startAudio: true });
-            const path = `${dirAudio}/${uuid.v4()}.acc`;
-            const audioSet = {
-                AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-                AudioSourceAndroid: AudioSourceAndroidType.MIC,
-                AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-                AVNumberOfChannelsKeyIOS: 2,
-                AVFormatIDKeyIOS: AVEncodingOption.aac,
-            };
-            const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
-            this.audioRecorderPlayer.addRecordBackListener((e) => {
-                // this.millisToMinutesAndSeconds(e.current_position);
-            });
-        } catch (error) {
+        // try {
+        //     const dirAudio = await getAudioFolderPath()
+        //     this.setState({ startAudio: true });
+        //     const path = `${dirAudio}/${uuid.v4()}.acc`;
+        //     const audioSet = {
+        //         AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+        //         AudioSourceAndroid: AudioSourceAndroidType.MIC,
+        //         AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+        //         AVNumberOfChannelsKeyIOS: 2,
+        //         AVFormatIDKeyIOS: AVEncodingOption.aac,
+        //     };
+        //     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
+        //     this.audioRecorderPlayer.addRecordBackListener((e) => {
+        //         // this.millisToMinutesAndSeconds(e.current_position);
+        //     });
+        // } catch (error) {
 
-        }
+        // }
 
     };
     onStopRecord = async () => {
-        this.setState({ startAudio: false });
-        const result = await this.audioRecorderPlayer.stopRecorder();
-        this.audioRecorderPlayer.removeRecordBackListener();
-        const fileName = result.split('/').pop();
+        // this.setState({ startAudio: false });
+        // const result = await this.audioRecorderPlayer.stopRecorder();
+        // this.audioRecorderPlayer.removeRecordBackListener();
+        // const fileName = result.split('/').pop();
         // let audioArr = [];
         // let audio = {
         //     name: fileName,

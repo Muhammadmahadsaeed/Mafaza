@@ -118,15 +118,6 @@ const DoctorSignUp2 = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('DoctorSignUp1Screen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Step 2 of 6 - About You</Text>
-            </TouchableOpacity>
             <View style={styles.multiouterview}>
               <Text style={styles.multitext}>Speaciality</Text>
               {speaciality.map((speaciality, index) => (

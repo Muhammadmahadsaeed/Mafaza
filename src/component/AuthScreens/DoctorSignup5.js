@@ -155,16 +155,7 @@ const DoctorSignup3 = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('DoctorSignUp4Screen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Step 5 of 6 - Upload Picture</Text>
-            </TouchableOpacity>
-
+           
             <View style={styles.imageView}>
               {imageSelected ? (
                 <Image source={{uri: filePath.uri}} style={styles.imageStyle} />
@@ -320,8 +311,9 @@ const styles = StyleSheet.create({
   imageStyle: {
     height: '100%',
     width: '100%',
-    backgroundColor: 'green',
+    backgroundColor: 'white',
     borderRadius: 100,
+    // resizeMode:'contain'
   },
   cameraimage: {
     height: 30,

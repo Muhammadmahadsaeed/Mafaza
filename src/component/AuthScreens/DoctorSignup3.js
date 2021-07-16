@@ -142,15 +142,7 @@ const DoctorSignup3 = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('DoctorSignUp2Screen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Step 3 of 6 - Practice Details</Text>
-            </TouchableOpacity>
+           
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputStyle}
@@ -236,6 +228,7 @@ const DoctorSignup3 = ({navigation}) => {
                 style={styles.reviewaddresstext}
                 placeholder={'Review Address'}
                 textAlignVertical="top"
+                multiline
                 autoCapitalize="none"
                 keyboardType="ascii-capable"
                 returnKeyType="next"

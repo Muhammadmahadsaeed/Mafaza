@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,13 +12,13 @@ import {
 import color from '../../constants/colors';
 import font from '../../constants/fonts';
 import OTPTextView from 'react-native-otp-textinput';
-import {api, headers} from '../Config/env';
-import {useDispatch} from 'react-redux';
+import { api, headers } from '../Config/env';
+import { useDispatch } from 'react-redux';
 
-const DoctorOTP = ({navigation}) => {
+const DoctorOTP = ({ navigation }) => {
   const dispatch = useDispatch();
   const mapDispatchToProps = (value) => {
-    dispatch({type: 'SET_USER', payload: value});
+    dispatch({ type: 'SET_USER', payload: value });
   };
 
   let otpInput = useRef(null);
@@ -101,15 +101,7 @@ const DoctorOTP = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('DoctorSignUp5Screen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Step 6 of 6 - Confirm OTP</Text>
-            </TouchableOpacity>
+
             <Text style={styles.Infotext}>
               Please enter 6 digits verification code received on sms on your
               number to move to dashboard

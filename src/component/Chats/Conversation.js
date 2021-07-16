@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     message: {
-        fontFamily: fonts.fonts.PoppinsMedium,
-        fontSize: 18,
+        fontFamily: fonts.fonts.PoppinsRegular,
+        fontSize: 15,
        
     },
 })

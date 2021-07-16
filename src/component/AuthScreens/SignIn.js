@@ -104,15 +104,6 @@ const SignIn = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('SelectOptionScreen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>Login</Text>
-            </TouchableOpacity>
             <Text style={styles.Infotext}>
               Enter the values to Sign Up and got your problem solved with
               Mafaza certified Doctors

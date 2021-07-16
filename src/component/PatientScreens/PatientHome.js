@@ -39,6 +39,7 @@ const PatientHome = ({ navigation }) => {
       });
   };
   const getAppointments = () => {
+    console.log(user.data.user._id);
     fetch(`${api}appointment/show`, {
       method: 'POST',
       headers: headers,
@@ -48,6 +49,7 @@ const PatientHome = ({ navigation }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
         if (responseJson.status == 1) {
           setAppointments(responseJson.data);
         }
