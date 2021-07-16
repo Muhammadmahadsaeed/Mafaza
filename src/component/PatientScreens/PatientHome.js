@@ -11,8 +11,9 @@ import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import { api, headers } from '../Config/env';
 import DoctorList from './DoctorList';
-import {useSelector} from 'react-redux';
-
+import { useSelector } from 'react-redux';
+import { createDirectory } from '../utils/directory';
+import { askForPermission } from '../utils/permission';
 const PatientHome = ({ navigation }) => {
   const [dataSource, setDataSource] = useState([]);
   const [Appointments, setAppointments] = useState([]);
@@ -21,6 +22,7 @@ const PatientHome = ({ navigation }) => {
   useEffect(() => {
     getDoctors();
     getAppointments();
+    checkPermission()
   }, []);
 
   const getDoctors = () => {
@@ -39,7 +41,6 @@ const PatientHome = ({ navigation }) => {
       });
   };
   const getAppointments = () => {
-    console.log(user.data.user._id);
     fetch(`${api}appointment/show`, {
       method: 'POST',
       headers: headers,
@@ -49,7 +50,6 @@ const PatientHome = ({ navigation }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         if (responseJson.status == 1) {
           setAppointments(responseJson.data);
         }
@@ -58,6 +58,17 @@ const PatientHome = ({ navigation }) => {
         console.log(error);
       });
   };
+  const checkPermission = async () =>{
+    try {
+      const res = await askForPermission()
+      if(res == 'granted'){
+        await createDirectory()
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -120,86 +131,91 @@ const PatientHome = ({ navigation }) => {
               paddingRight: 20,
               paddingTop: 10
             }}>
-              <FlatList
-                data={Appointments}
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-                renderItem={({item}) => (
-                  <TouchableOpacity style={styles.FlatListTouchButton}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View style={{flex: 3}}>
-                        <View style={[styles.rightview]}>
-                          <View
+              {!!Appointments.length ?
+            <FlatList
+              data={Appointments}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              renderItem={({ item }) => (
+                <TouchableOpacity style={styles.FlatListTouchButton}>
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 3 }}>
+                      <View style={[styles.rightview]}>
+                        <View
+                          style={[
+                            styles.DoctorImageView,
+                            { marginLeft: 10, borderColor: 'white' },
+                          ]}>
+                          <Image
+                            source={require('../../../assets/Images/doctor.png')}
+                            resizeMode="stretch"
+                            style={styles.DoctorImage}
+                          />
+                        </View>
+                        <View style={styles.innerrightview}>
+                          <Text style={[styles.nametext, { color: 'white' }]}>
+                            {item.doctorId.name}
+                          </Text>
+                          <Text
                             style={[
-                              styles.DoctorImageView,
-                              {marginLeft: 10, borderColor: 'white'},
+                              styles.nametext,
+                              { fontSize: 12, color: 'white' },
                             ]}>
-                            <Image
-                              source={require('../../../assets/Images/doctor.png')}
-                              resizeMode="stretch"
-                              style={styles.DoctorImage}
-                            />
-                          </View>
-                          <View style={styles.innerrightview}>
-                            <Text style={[styles.nametext, {color: 'white'}]}>
-                              {item.doctorId.name}
-                            </Text>
-                            <Text
-                              style={[
-                                styles.nametext,
-                                {fontSize: 12, color: 'white'},
-                              ]}>
-                              {item.doctorId.designation}
-                            </Text>
-                          </View>
+                            {item.doctorId.designation}
+                          </Text>
                         </View>
                       </View>
-                      <View style={{flex: 1, justifyContent: 'center'}}>
-                        <TouchableOpacity style={{alignItems: 'center'}}>
+                    </View>
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                      <TouchableOpacity style={{ alignItems: 'center' }}>
+                        <Image
+                          source={require('../../../assets/Images/cross.png')}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <View
+                      style={[
+                        styles.belowButtonView,
+                        { paddingLeft: 5, paddingRight: 5 },
+                      ]}>
+                      <TouchableOpacity style={styles.belowButton}>
+                        <View
+                          style={[
+                            styles.bellowbuttoninnerview,
+                            { width: '15%' },
+                          ]}>
                           <Image
-                            source={require('../../../assets/Images/cross.png')}
+                            source={require('../../../assets/Images/clock.png')}
                             resizeMode="contain"
                           />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                    <View style={{flex: 1}}>
-                      <View
-                        style={[
-                          styles.belowButtonView,
-                          {paddingLeft: 5, paddingRight: 5},
-                        ]}>
-                        <TouchableOpacity style={styles.belowButton}>
-                          <View
+                        </View>
+                        <View
+                          style={[
+                            styles.bellowbuttoninnerview,
+                            { width: '85%' },
+                          ]}>
+                          <Text
                             style={[
-                              styles.bellowbuttoninnerview,
-                              {width: '15%'},
+                              styles.belowButtonText,
+                              { marginLeft: 10 },
                             ]}>
-                            <Image
-                              source={require('../../../assets/Images/clock.png')}
-                              resizeMode="contain"
-                            />
-                          </View>
-                          <View
-                            style={[
-                              styles.bellowbuttoninnerview,
-                              {width: '85%'},
-                            ]}>
-                            <Text
-                              style={[
-                                styles.belowButtonText,
-                                {marginLeft: 10},
-                              ]}>
-                              {item.timeSlot}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
+                            {item.timeSlot}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
+                  </View>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />:
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+              <Text style={{fontFamily:fonts.fonts.PoppinsBold,fontSize:16}}>No Appointments</Text>
+                </View>
+            }
           </View>
         </View>
         <View style={{ flex: 1 }}>
@@ -217,15 +233,15 @@ const PatientHome = ({ navigation }) => {
           <View
             style={{
               flex: 1,
-              paddingLeft: 20,
-              paddingRight: 20,
+              paddingHorizontal: 20
             }}>
             <FlatList
               data={dataSource}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <DoctorList data={item} navigation={navigation} />
               )}
               keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
             />
           </View>
         </View>

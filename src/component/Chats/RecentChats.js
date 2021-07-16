@@ -21,6 +21,7 @@ const RecentChats = ({ navigation }) => {
   }
 
   useEffect(() => {
+
     getRecentChats()
   }, [])
 
@@ -30,10 +31,12 @@ const RecentChats = ({ navigation }) => {
     })
       .then(res => res.json())
       .then((responseJson) => {
-        setIsLoading(false)
+        console.log(responseJson.data);
         setData(responseJson.data)
+        setIsLoading(false)
       })
       .catch(err => {
+        setIsLoading(false)
         console.log(err);
       })
 
@@ -68,6 +71,7 @@ const RecentChats = ({ navigation }) => {
       />
     );
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchView}>
@@ -85,7 +89,11 @@ const RecentChats = ({ navigation }) => {
         // onChangeText={(e) => searchUser(e)}
         />
       </View>
-      {data.length && !isLoading ?
+      {data.length != '0' && isLoading ?
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator color="black" size="large" />
+        </View>
+        :
         <FlatList style={{ flex: 1, paddingHorizontal: 10 }}
           ref={flatListRef}
           data={data}
@@ -93,14 +101,10 @@ const RecentChats = ({ navigation }) => {
           renderItem={(i, index) => renderItemComponent(i)}
           ItemSeparatorComponent={() => renderSeparator()}
         />
-        :
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator color="black" size="large" />
-        </View>
       }
-      {!data.length && !isLoading &&
+      {data.length == '0' && !isLoading &&
         <View style={styles.loadingContainer}>
-         <Text> No Recent Chats</Text>
+          <Text> No Recent Chats</Text>
         </View>
       }
     </View>
@@ -200,6 +204,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
   }
 })
