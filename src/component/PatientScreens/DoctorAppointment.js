@@ -8,8 +8,9 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  ActivityIndicator,
+  ActivityIndicator, Platform
 } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import { api, headers } from '../Config/env';
@@ -73,6 +74,43 @@ const DoctorProfile = ({ navigation }) => {
     <View style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="handled">
         <KeyboardAvoidingView enabled>
+          <View style={styles.dropDownView}>
+            <View style={{...(Platform.OS == 'ios' && {zIndex: 10 })}}>
+              <DropDownPicker
+                items={[
+                  { label: 'Mafaza Patient', value: 'Mafaza Patient' },
+                  { label: 'Personal Patient', value: 'Personal Patient' },
+                  { label: 'Both', value: 'Both' },
+                ]}
+                placeholder="Select Patient Category"
+                selectedLabelStyle={{ color: 'black' }}
+                placeholderStyle={{ color: '#9EA0A4' }}
+                style={styles.dropDownStyle}
+                containerStyle={styles.dropDownContainer}
+                itemStyle={styles.dropDownItemStyle}
+                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                onChangeItem={(item) => setPatientType(item.value)}
+              />
+            </View>
+            <View style={{...(Platform.OS == 'ios' && {zIndex: 10})}}>
+              <DropDownPicker
+                items={[
+                  { label: 'Mafaza Patient', value: 'Mafaza Patient' },
+                  { label: 'Personal Patient', value: 'Personal Patient' },
+                  { label: 'Both', value: 'Both' },
+                ]}
+                placeholder="Select Patient Category"
+                selectedLabelStyle={{ color: 'black' }}
+                placeholderStyle={{ color: '#9EA0A4' }}
+                style={styles.dropDownStyle}
+                containerStyle={styles.dropDownContainer}
+                itemStyle={styles.dropDownItemStyle}
+                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                onChangeItem={(item) => setPatientType(item.value)}
+              />
+            </View>
+          </View>
+
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.inputStyle}
@@ -151,11 +189,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingHorizontal: 10
   },
-  textArea:{
+  textArea: {
     fontFamily: fonts.fonts.PoppinsRegular,
     fontSize: 16,
     paddingHorizontal: 10,
-    textAlign: 'justify', 
+    textAlign: 'justify',
     justifyContent: "flex-start",
     textAlignVertical: 'top'
   },
@@ -180,4 +218,23 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
   },
+  dropDownView:{
+    flex:1,
+    flexDirection:'row',
+    backgroundColor: 'red', 
+    marginTop: 20,
+  },
+  dropDownContainer:{
+    width:'50%',
+    flexDirection:'column'
+  },
+  dropDownStyle: {
+    backgroundColor: '#fafafa',
+    borderColor: colors.Colors.Blue,
+    borderRadius: 4,
+    color: '#000',
+  },
+  dropDownItemStyle: {
+    justifyContent: 'flex-start',
+  }
 });
