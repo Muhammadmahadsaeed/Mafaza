@@ -40,6 +40,7 @@ const PatientHome = ({ navigation }) => {
         console.log(error);
       });
   };
+
   const getAppointments = () => {
     fetch(`${api}appointment/show`, {
       method: 'POST',
@@ -50,6 +51,7 @@ const PatientHome = ({ navigation }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+        // console.log(responseJson);
         if (responseJson.status == 1) {
           setAppointments(responseJson.data);
         }
@@ -153,14 +155,14 @@ const PatientHome = ({ navigation }) => {
                         </View>
                         <View style={styles.innerrightview}>
                           <Text style={[styles.nametext, { color: 'white' }]}>
-                            {item.doctorId.name}
+                            Mahad khan
                           </Text>
                           <Text
                             style={[
                               styles.nametext,
                               { fontSize: 12, color: 'white' },
                             ]}>
-                            {item.doctorId.designation}
+                            karachi
                           </Text>
                         </View>
                       </View>
@@ -201,7 +203,7 @@ const PatientHome = ({ navigation }) => {
                               styles.belowButtonText,
                               { marginLeft: 10 },
                             ]}>
-                            {item.timeSlot}
+                            Sunday
                           </Text>
                         </View>
                       </TouchableOpacity>

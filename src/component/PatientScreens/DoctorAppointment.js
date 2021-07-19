@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -18,125 +18,189 @@ import { useSelector } from 'react-redux';
 
 const DoctorProfile = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const [timeSlot, settimeSlot] = useState('');
-  const [consultation_purpose, setconsultation_purpose] = useState('');
+  const [name, setName] = useState('')
+  const [contactNum, setContactNum] = useState('')
+  const [userSelectedDay, setUserSelectedDay] = useState('')
+  const [userSelectedTime, setUserSelectedTime] = useState('')
   const [message, setmessage] = useState('');
   const [errortext, seterrortext] = useState('');
+  const [day, setDay] = useState(false) //open dropdown for days
+  const [time, setTime] = useState(false) //open dropdown for time
+  const [showDays, setShowDays] = useState([]) //arr for showing days
+  const [selectTime, setSelectedTime] = useState([]) //arr for showing selected time against day
+  const [data, setData] = useState([]) //arr for get all data from api
   const user = useSelector((state) => state.user.user);
   const DoctorData = navigation.getParam('doctorData')
 
-  const HandleAppointment = () => {
-    seterrortext('')
-    if (timeSlot != '') {
-      if (consultation_purpose != '') {
-        setLoading(true)
-        fetch(`${api}appointment/add`, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify({
-            date: '1/5/2021',
-            timeSlot: timeSlot,
-            name: user.data.user.name,
-            consultation_purpose: consultation_purpose,
-            patientId: user.data.user._id,
-            doctorId: DoctorData._id,
-            message: message
-          }),
-        })
-          .then((response) => response.json())
-          .then((responseJson) => {
-            if (responseJson.status == 1) {
-              setLoading(false);
-              settimeSlot('')
-              setconsultation_purpose('')
-              setmessage('')
-              alert("Your appointment have been booked")
-            } else {
-              setLoading(false);
-              seterrortext('Ckeck your Internet connection');
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            setLoading(false);
-            seterrortext('Ckeck your Internet connection');
-          });
-      }
-      else {
-        seterrortext('Enter Consultation Purpose')
-      }
+  useEffect(() => {
+    getTimeSlot()
+  }, [])
 
-    } else {
-      seterrortext('Enter time slot');
+  const getTimeSlot = async () => {
+    await fetch(`${api}appointment/getfree/slots`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        doctorId: DoctorData._id
+      })
+    })
+      .then(res => res.json())
+      .then((json) => {
+        console.log(json);
+        setData(json.data)
+        const day = json.data.map((res) => {
+          return { label: res.day, value: res.day }
+        })
+        setShowDays(day)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getDayFromUser = (item) => {
+    setUserSelectedDay(item)
+    const time = []
+    data.filter((res) => {
+      if (res.day == item) {
+        res.slots.map(result => {
+          let slots = {
+            label: result.from + " to " + result.to,
+            value: result.from + " to " + result.to
+          }
+          time.push(slots)
+        })
+      }
+    })
+    setSelectedTime(time)
+  }
+
+  const submitAppointment = () => {
+    seterrortext('')
+    const slot = userSelectedTime.split(' to ')
+    let slotObj = {
+      from: slot[0],
+      to: slot[1]
     }
+
+    // if(name == '' && contactNum == '' && userSelectedDay == ''){
+
+    // }
+    // if (timeSlot != '') {
+    //   if (consultation_purpose != '') {
+    setLoading(true)
+    fetch(`${api}appointment/add`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        date: '1-6-2021',
+        timeSlot: slotObj,
+        name: name,
+        phone_no: contactNum,
+        consultation_purpose: message,
+        patientId: user.data.user._id,
+        doctorId: DoctorData._id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        if (responseJson.status == 1) {
+          setLoading(false);
+          setName('')
+          setContactNum('')
+          setmessage('')
+          alert("Your appointment have been booked")
+        } else {
+          setLoading(false);
+          seterrortext('Ckeck your Internet connection');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        seterrortext('Ckeck your Internet connection');
+      });
+    //   }
+    //   else {
+    //     seterrortext('Enter Consultation Purpose')
+    //   }
+
+    // } else {
+    //   seterrortext('Enter time slot');
+    // }
   };
+  const openDayDropDown = () => {
+    setDay(true)
+    setTime(false)
+    // setSelectedTime([])
+  }
+  const openTimeDropDown = () => {
+    setTime(true)
+    setDay(false)
+  }
   return (
     <View style={styles.container}>
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <KeyboardAvoidingView enabled>
-          <View style={styles.dropDownView}>
-            <View style={{...(Platform.OS == 'ios' && {zIndex: 10 })}}>
-              <DropDownPicker
-                items={[
-                  { label: 'Mafaza Patient', value: 'Mafaza Patient' },
-                  { label: 'Personal Patient', value: 'Personal Patient' },
-                  { label: 'Both', value: 'Both' },
-                ]}
-                placeholder="Select Patient Category"
-                selectedLabelStyle={{ color: 'black' }}
-                placeholderStyle={{ color: '#9EA0A4' }}
-                style={styles.dropDownStyle}
-                containerStyle={styles.dropDownContainer}
-                itemStyle={styles.dropDownItemStyle}
-                dropDownStyle={{ backgroundColor: '#fafafa' }}
-                onChangeItem={(item) => setPatientType(item.value)}
-              />
-            </View>
-            <View style={{...(Platform.OS == 'ios' && {zIndex: 10})}}>
-              <DropDownPicker
-                items={[
-                  { label: 'Mafaza Patient', value: 'Mafaza Patient' },
-                  { label: 'Personal Patient', value: 'Personal Patient' },
-                  { label: 'Both', value: 'Both' },
-                ]}
-                placeholder="Select Patient Category"
-                selectedLabelStyle={{ color: 'black' }}
-                placeholderStyle={{ color: '#9EA0A4' }}
-                style={styles.dropDownStyle}
-                containerStyle={styles.dropDownContainer}
-                itemStyle={styles.dropDownItemStyle}
-                dropDownStyle={{ backgroundColor: '#fafafa' }}
-                onChangeItem={(item) => setPatientType(item.value)}
-              />
-            </View>
-          </View>
-
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.inputStyle}
-              placeholder="Enter Time Slot"
+              placeholder="Enter your contact no"
               autoCapitalize="none"
               keyboardType="decimal-pad"
-              value={timeSlot}
+              value={contactNum}
               returnKeyType="next"
               underlineColorAndroid="#f000"
               blurOnSubmit={false}
-              onChangeText={(text) => settimeSlot(text)}
+              onChangeText={(text) => setContactNum(text)}
             />
           </View>
+
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.inputStyle}
-              placeholder="Enter Consultation Purpose"
+              placeholder="Enter your name"
               autoCapitalize="none"
               keyboardType='ascii-capable'
               returnKeyType="next"
-              value={consultation_purpose}
+              value={name}
               underlineColorAndroid="#f000"
               blurOnSubmit={false}
-              onChangeText={(text) => setconsultation_purpose(text)}
+              onChangeText={(text) => setName(text)}
             />
           </View>
+          <View style={styles.dropDownView}>
+            <View style={{ ...(Platform.OS == 'ios' && { zIndex: 10 }), width: '48%' }}>
+              <DropDownPicker
+                items={showDays}
+                placeholder="Select Day"
+                selectedLabelStyle={styles.dropDownSelectedLabelStyle}
+                placeholderStyle={styles.dropDownPlaceholderStyle}
+                style={styles.dropDownStyle}
+                itemStyle={styles.dropDownItemStyle}
+                isVisible={day}
+                onOpen={() => openDayDropDown()}
+                onClose={() => setDay(false)}
+                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                onChangeItem={(item) => getDayFromUser(item.value)}
+              />
+            </View>
+            <View style={{ ...(Platform.OS == 'ios' && { zIndex: 10 }), width: '48%' }}>
+              <DropDownPicker
+                items={selectTime}
+                placeholder="Select Time"
+                selectedLabelStyle={styles.dropDownSelectedLabelStyle}
+                placeholderStyle={styles.dropDownPlaceholderStyle}
+                style={styles.dropDownStyle}
+                isVisible={time}
+                onOpen={() => openTimeDropDown()}
+                onClose={() => setTime(false)}
+                itemStyle={styles.dropDownItemStyle}
+                dropDownStyle={{ backgroundColor: '#fafafa' }}
+                onChangeItem={(item) => setUserSelectedTime(item.value)}
+              />
+            </View>
+          </View>
+
           <View style={[styles.inputContainer, { height: 150 }]}>
             <TextInput
               style={styles.textArea}
@@ -155,8 +219,8 @@ const DoctorProfile = ({ navigation }) => {
           <View>
             <Text style={styles.txtstyle}>{errortext}</Text>
           </View>
-          <TouchableOpacity
-            onPress={() => HandleAppointment()}
+          <TouchableOpacity activeOpacity={0.8}
+            onPress={() => submitAppointment()}
             style={styles.Btndesign}>
             {loading ? (
               <ActivityIndicator size="small" color="white" />
@@ -218,15 +282,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
   },
-  dropDownView:{
-    flex:1,
-    flexDirection:'row',
-    backgroundColor: 'red', 
+  dropDownView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 20,
   },
-  dropDownContainer:{
-    width:'50%',
-    flexDirection:'column'
+  dropDownContainer: {
+    width: '50%',
+    flexDirection: 'column'
   },
   dropDownStyle: {
     backgroundColor: '#fafafa',
@@ -236,5 +300,11 @@ const styles = StyleSheet.create({
   },
   dropDownItemStyle: {
     justifyContent: 'flex-start',
+  },
+  dropDownSelectedLabelStyle: {
+    color: 'gray', fontSize: 12, fontFamily: fonts.fonts.PoppinsRegular,
+  },
+  dropDownPlaceholderStyle: {
+    fontSize: 12, fontFamily: fonts.fonts.PoppinsRegular, color: 'gray'
   }
 });

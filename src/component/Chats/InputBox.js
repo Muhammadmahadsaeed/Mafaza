@@ -19,7 +19,8 @@ import AudioRecorderPlayer, {
     AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import uuid from 'react-native-uuid';
-
+import RNFS from 'react-native-fs';
+import fonts from '../../constants/fonts';
 import { getAudioFolderPath } from '../utils/directory';
 
 class InputBox extends React.Component {
@@ -89,30 +90,32 @@ class InputBox extends React.Component {
         }
     };
     onStartRecording = async () => {
-        // try {
-        //     const dirAudio = await getAudioFolderPath()
-        //     this.setState({ startAudio: true });
-        //     const path = `${dirAudio}/${uuid.v4()}.acc`;
-        //     const audioSet = {
-        //         AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-        //         AudioSourceAndroid: AudioSourceAndroidType.MIC,
-        //         AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-        //         AVNumberOfChannelsKeyIOS: 2,
-        //         AVFormatIDKeyIOS: AVEncodingOption.aac,
-        //     };
-        //     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
-        //     this.audioRecorderPlayer.addRecordBackListener((e) => {
-        //         // this.millisToMinutesAndSeconds(e.current_position);
-        //     });
-        // } catch (error) {
+        this.setState({ startAudio: true });
+        try {
+            const dirAudio = await getAudioFolderPath()
+            const path = `${dirAudio}/${uuid.v4()}.acc`;
+            const audioSet = {
+                AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+                AudioSourceAndroid: AudioSourceAndroidType.MIC,
+                AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+                AVNumberOfChannelsKeyIOS: 2,
+                AVFormatIDKeyIOS: AVEncodingOption.aac,
+            };
+            const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
+            this.audioRecorderPlayer.addRecordBackListener((e) => {
+                this.convertRecordingTimeToMinAndSec(e.currentPosition);
+            });
+        } catch (error) {
 
-        // }
+        }
 
     };
     onStopRecord = async () => {
+        // this.setState({ startAudio: false })
+        console.log("stop");
         // this.setState({ startAudio: false });
-        // const result = await this.audioRecorderPlayer.stopRecorder();
-        // this.audioRecorderPlayer.removeRecordBackListener();
+        const result = await this.audioRecorderPlayer.stopRecorder();
+        this.audioRecorderPlayer.removeRecordBackListener();
         // const fileName = result.split('/').pop();
         // let audioArr = [];
         // let audio = {
@@ -141,33 +144,71 @@ class InputBox extends React.Component {
         // });
 
     };
+    convertRecordingTimeToMinAndSec(millis) {
+        var minutes = Math.floor(millis / 60000);
+        var seconds = ((millis % 60000) / 1000).toFixed(0);
+        let time = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        this.setState({ recordTime: time, recordDuration: millis });
+      }
     onSendMessage = () => {
         let message = this.state.msg;
         this.setState({ msg: '' })
         this.textInput.clear();
         // this.textInput.blur();
         let messageObj = {
-          messageId: uuid.v4(),
-          userName: 'mahad',
-          senderId: this.props.senderId,
-          receiverId: this.props.receiverId,
-          type: 'text',
-          isDownload: false,
-          messageText: message,
-          sendTime: Date.now()
+            messageId: uuid.v4(),
+            userName: 'mahad',
+            senderId: this.props.senderId,
+            receiverId: this.props.receiverId,
+            type: 'text',
+            isDownload: false,
+            messageText: message,
+            sendTime: Date.now()
         };
         this.props.getDataFromInput(messageObj);
-    
+
+    };
+    renderAudioRecorder = () => {
+        return (
+            <View style={styles.audioContainer}>
+                <Text style={styles.audioTimerText}>{this.state.recordTime}</Text>
+                <TouchableOpacity
+                    style={{ padding: 5 }}
+                    activeOpacity={0.8}
+                    onPress={this.onCancel}>
+                    <Text style={styles.cancelText}>cancel</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+    onCancel = async () => {
+        const fileName = result.split('/').pop();
+        console.log(fileName);
+        const dirAudio = await getAudioFolderPath()
+        console.log(dirAudio);
+        const path = `${dirAudio}/${fileName}`;
+        RNFS.unlink(path)
+          .then(() => {
+            this.setState({
+              recordSecs: 0,
+              startAudio: false,
+              recordTime: '0:00',
+            });
+          })
+          // `unlink` will throw an error, if the item to unlink does not exist
+          .catch((err) => {
+            console.log(err.message);
+          });
       };
     render() {
-        const { msg } = this.state
+        const { msg, startAudio } = this.state
         return (
             <KeyboardAvoidingView
                 behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={100}
                 style={{ width: '100%' }}>
                 <View style={styles.container}>
-                    <TouchableOpacity style={styles.iconContainer}
+                    {!startAudio && <TouchableOpacity style={styles.iconContainer}
                         activeOpacity={0.8}>
                         <View style={styles.buttonContainer}>
                             <Image
@@ -176,32 +217,34 @@ class InputBox extends React.Component {
                             />
                         </View>
                     </TouchableOpacity>
-                    <TextInput
-                        ref={(ref) => { this.textInput = ref }}
-                        placeholder={'Type a message'}
-                        style={styles.textInput}
-                        multiline
-                        value={msg}
-                        onChangeText={(text) => this.setState({ msg: text })}
-                    />
+                    }
+                    {startAudio ?
+                        this.renderAudioRecorder()
+                        :
+                        <TextInput
+                            ref={(ref) => { this.textInput = ref }}
+                            placeholder={'Type a message'}
+                            style={styles.textInput}
+                            multiline
+                            value={msg}
+                            onChangeText={(text) => this.setState({ msg: text })} />
+                    }
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.iconContainer}
-                            activeOpacity={0.8} onPress={() => this.props.openAttachmentModal()}>
-                            <View style={styles.buttonContainer}>
-                                <Image
-                                    source={require('../../../assets/Images/attachment.png')}
-                                    style={styles.btnIcon}
-                                />
-                            </View>
-                        </TouchableOpacity>
+                        {!startAudio &&
+                            <TouchableOpacity style={styles.iconContainer}
+                                activeOpacity={0.8} onPress={() => this.props.openAttachmentModal()}>
+                                <View style={styles.buttonContainer}>
+                                    <Image source={require('../../../assets/Images/attachment.png')} style={styles.btnIcon} />
+                                </View>
+                            </TouchableOpacity>
+                        }
                         <TouchableOpacity style={styles.iconContainer}
                             onPress={this.onPressIn}
                             onLongPress={!msg.length ? this.onStartRecording : null}
                             onPressOut={this.onPressOut}
                             activeOpacity={0.8}>
                             <View style={styles.buttonContainer}>
-                                <Image
-                                    source={msg.length ? require('../../../assets/Images/send.png') : require('../../../assets/Images/voice.png')}
+                                <Image source={msg.length ? require('../../../assets/Images/send.png') : require('../../../assets/Images/voice.png')}
                                     style={styles.btnIcon}
                                 />
                             </View>
@@ -244,6 +287,26 @@ const styles = StyleSheet.create({
         width: '80%',
         resizeMode: 'contain',
     },
+    audioContainer: {
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        paddingHorizontal: 10,
+        borderRadius: 50,
+        marginRight: 7,
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      audioTimerText: {
+        color: 'black',
+        fontSize: 18,
+        fontFamily: fonts.fonts.PoppinsMedium
+      },
+      cancelText: {
+        color: 'red',
+        fontSize: 16,
+        fontFamily: fonts.fonts.PoppinsBold
+      },
 })
 
 export default InputBox

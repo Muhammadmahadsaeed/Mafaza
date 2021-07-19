@@ -19,11 +19,13 @@ const ConversationImage = ({ data }) => {
   }, [])
 
   const uploadImageToServer = async () => {
+    console.log(data.imagesObj);
     let formdata = new FormData();
     formdata.append('messageType', data.type);
-    data.imagesObj?.forEach((image) => {
-      formdata.append('messageContent', image);
-    });
+    formdata.append('messageContent',[{"name": "80633657-5b0a-40e6-9d2b-db1cbf725a79.jpg", "type": "image/jpeg", "uri": "file:///storage/emulated/0/Android/data/com.mafaza/files/Pictures/80633657-5b0a-40e6-9d2b-db1cbf725a79.jpg"}])
+    // data.imagesObj?.forEach((image) => {
+    //   formdata.append('messageContent', image);
+    // });
     await fetch(`http://34.200.187.81:8080/message/media`, {
       method: 'POST',
       headers: {
@@ -33,7 +35,6 @@ const ConversationImage = ({ data }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         let messageObj = {
           messageId: data.messageId,
           userName: data.userName,
@@ -46,7 +47,7 @@ const ConversationImage = ({ data }) => {
         setLoading(false)
         sendMessageToServer(messageObj)
       })
-      .catch((err) => { console.log("err") });
+      .catch((err) => console.log(err));
   }
 
   const sendMessageToServer = (msg) => {

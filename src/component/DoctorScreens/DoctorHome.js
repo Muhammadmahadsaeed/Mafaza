@@ -18,7 +18,7 @@ const DoctorHome = ({ navigation }) => {
   const user = useSelector(state => state.user.user);
 
   useEffect(() => {
-   
+
     fetch('https://jsonplaceholder.typicode.com/todos')
       .then((response) => response.json())
       .then((json) => setDataSource(json))

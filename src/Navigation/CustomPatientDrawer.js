@@ -55,23 +55,24 @@ class CustomPatientDrawer extends Component {
             justifyContent: 'space-between',
           }}>
           <View style={styles.lowercontainer}>
-            <View style={{ width: 100, marginLeft: 20,backgroundColor:'red' }}>
-              <TouchableOpacity
-                style={{ flexDirection: 'row' }}
+            <View style={{ marginHorizontal: 20 }}>
+              <TouchableOpacity activeOpacity={0.8}
+                style={{flex:1, flexDirection: 'row', paddingVertical: 15 }}
                 onPress={() => this.props.navigation.toggleDrawer()}>
-                <Image
-                  source={require('../../assets/Images/dashboardcircle.png')}
-                  resizeMode="contain"
-                />
-                <Text
-                  style={{
-                    marginLeft: 5,
-                    color: colors.Colors.Orange,
-                    fontFamily: fonts.fonts.PoppinsRegular,
-                    fontSize: 14,
-                  }}>
-                  Close
-                </Text>
+                <View style={{ height: 20, width: 20, }}>
+                  <Image source={require('../../assets/Images/dashboardcircle.png')} />
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      marginLeft: 5,
+                      color: colors.Colors.Orange,
+                      fontFamily: fonts.fonts.PoppinsRegular,
+                      fontSize: 14,
+                    }}>
+                    Close
+                  </Text>
+                </View>
               </TouchableOpacity>
             </View>
             <Text style={styles.randatext}>
@@ -141,16 +142,13 @@ class CustomPatientDrawer extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
     backgroundColor: '#fff',
   },
   lowercontainer: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingVertical:30
   },
   btnoption: {
     backgroundColor: '#F5F5F5',

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -15,7 +15,7 @@ class CustomDoctorDrawer extends Component {
   constructor() {
     super();
     this.state = {
-      name:'',
+      name: '',
       items: [
         {
           navOptionName: 'Home',
@@ -42,7 +42,7 @@ class CustomDoctorDrawer extends Component {
   logout = async () => {
     try {
       this.props.removeUser(null);
-      this.setState({name: ''});
+      this.setState({ name: '' });
       this.props.navigation.navigate('SignInScreen');
     } catch (error) {
     }
@@ -61,23 +61,24 @@ class CustomDoctorDrawer extends Component {
             justifyContent: 'space-between',
           }}>
           <View style={styles.lowercontainer}>
-            <View style={{width: 100, marginLeft: 20}}>
-              <TouchableOpacity
-                style={{flexDirection: 'row'}}
+            <View style={{ marginHorizontal: 20 }}>
+              <TouchableOpacity activeOpacity={0.8}
+                style={{ flex: 1, flexDirection: 'row', paddingVertical: 15 }}
                 onPress={() => this.props.navigation.toggleDrawer()}>
-                <Image
-                  source={require('../../assets/Images/dashboardcircle.png')}
-                  resizeMode="contain"
-                />
-                <Text
-                  style={{
-                    marginLeft: 5,
-                    color: colors.Colors.Orange,
-                    fontFamily: fonts.fonts.PoppinsRegular,
-                    fontSize: 14,
-                  }}>
-                  Close
-                </Text>
+                <View style={{ height: 20, width: 20, }}>
+                  <Image source={require('../../assets/Images/dashboardcircle.png')} />
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      marginLeft: 5,
+                      color: colors.Colors.Orange,
+                      fontFamily: fonts.fonts.PoppinsRegular,
+                      fontSize: 14,
+                    }}>
+                    Close
+                  </Text>
+                </View>
               </TouchableOpacity>
             </View>
             <Text style={styles.randatext}>
@@ -85,9 +86,9 @@ class CustomDoctorDrawer extends Component {
             </Text>
 
             <View style={styles.nameView}>
-              <View style={{width: '85%'}}>
+              <View style={{ width: '85%' }}>
                 <View style={[styles.rightview]}>
-                  <View style={[styles.DoctorImageView, {marginLeft: 10}]}>
+                  <View style={[styles.DoctorImageView, { marginLeft: 10 }]}>
                     <Image
                       source={require('../../assets/Images/doctor.png')}
                       resizeMode="stretch"
@@ -99,15 +100,15 @@ class CustomDoctorDrawer extends Component {
                     <TouchableOpacity
                       style={[
                         styles.updateView,
-                        {alignSelf: 'flex-start', marginLeft: 7},
+                        { alignSelf: 'flex-start', marginLeft: 7 },
                       ]}>
                       <Text style={styles.updateText}>Update Profile</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
-              <View style={{width: '15%',justifyContent:'center',alignItems:'center'}}>
-              <Image
+              <View style={{ width: '15%', justifyContent: 'center', alignItems: 'center' }}>
+                <Image
                   source={require('../../assets/Images/rightarrow.png')}
                   resizeMode="contain"
                 />
@@ -123,7 +124,7 @@ class CustomDoctorDrawer extends Component {
                   this.navigateedit(item.screenToNavigate);
                 }}
                 key={key}>
-                <Image source={item.uri} style={{marginLeft: 18}} />
+                <Image source={item.uri} style={{ marginLeft: 18 }} />
                 <Text style={styles.btnbelowtext}> {item.navOptionName}</Text>
               </TouchableOpacity>
             ))}
@@ -135,7 +136,7 @@ class CustomDoctorDrawer extends Component {
               }}>
               <Image
                 source={require('../../assets/Images/logout.png')}
-                style={{marginLeft: 18}}
+                style={{ marginLeft: 18 }}
               />
               <Text style={styles.btnbelowtext}> Logout</Text>
             </TouchableOpacity>
@@ -147,16 +148,13 @@ class CustomDoctorDrawer extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
     backgroundColor: '#fff',
   },
   lowercontainer: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingVertical: 30
   },
   btnoption: {
     backgroundColor: '#F5F5F5',
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 20,
   },
-  nameView:{
+  nameView: {
     backgroundColor: colors.Colors.Blue,
     marginLeft: 20,
     marginRight: 20,
@@ -225,7 +223,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 5
   },
-  randatext:{
+  randatext: {
     marginLeft: 20,
     marginTop: 20,
     fontSize: 16,
@@ -241,7 +239,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     removeUser: (RemoveUser) =>
-      dispatch({type: 'REMOVE_USER', payload: RemoveUser}),
+      dispatch({ type: 'REMOVE_USER', payload: RemoveUser }),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CustomDoctorDrawer);

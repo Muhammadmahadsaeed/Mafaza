@@ -81,15 +81,6 @@ const PatientOtp = ({navigation}) => {
         }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.innerView}>
-            <TouchableOpacity
-              style={styles.BackandTextView}
-              onPress={() => navigation.navigate('PatientSignUpScreen')}>
-              <Image
-                source={require('../../../assets/Images/Back.png')}
-                style={styles.BTVImage}
-              />
-              <Text style={styles.BTVtext}>OTP</Text>
-            </TouchableOpacity>
             <Text style={styles.Infotext}>
               Please enter 6 digits verification code received on sms on your
               number
