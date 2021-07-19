@@ -133,6 +133,7 @@ const PatientHome = ({ navigation }) => {
               paddingRight: 20,
               paddingTop: 10
             }}>
+              {!!Appointments.length ?
             <FlatList
               data={Appointments}
               showsHorizontalScrollIndicator={false}
@@ -212,7 +213,11 @@ const PatientHome = ({ navigation }) => {
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => index.toString()}
-            />
+            />:
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+              <Text style={{fontFamily:fonts.fonts.PoppinsBold,fontSize:16}}>No Appointments</Text>
+                </View>
+            }
           </View>
         </View>
         <View style={{ flex: 1 }}>

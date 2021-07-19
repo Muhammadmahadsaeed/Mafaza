@@ -55,9 +55,15 @@ class CustomPatientDrawer extends Component {
             justifyContent: 'space-between',
           }}>
           <View style={styles.lowercontainer}>
+<<<<<<< HEAD
             <View style={{ marginHorizontal: 20 }}>
               <TouchableOpacity activeOpacity={0.8}
                 style={{flex:1, flexDirection: 'row', paddingVertical: 15 }}
+=======
+            <View style={{ width: 100, marginLeft: 20 }}>
+              <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+>>>>>>> aaebef911890c4596967b2119e3b597f29ea5e8e
                 onPress={() => this.props.navigation.toggleDrawer()}>
                 <View style={{ height: 20, width: 20, }}>
                   <Image source={require('../../assets/Images/dashboardcircle.png')} />
