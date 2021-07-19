@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import fonts from '../../constants/fonts';
 
-const ConversationHeader = ({ navigation }) => {
+const ConversationHeader = ({ navigation, data }) => {
+    const { name, phone_no } = data
     const goToBack = () => {
         navigation.goBack()
     }
@@ -27,8 +28,8 @@ const ConversationHeader = ({ navigation }) => {
                             <Image source={require('../../../assets/Images/doctor.png')} style={styles.profileIconImg} />
                         </View>
                         <View style={styles.userDetail}>
-                            <Text style={styles.name} numberOfLines={1}>Mahad Ahmed khan qureshi hhhhhhhhhh</Text>
-                            <Text style={styles.num} numberOfLines={1}>number</Text>
+                            <Text style={styles.name} numberOfLines={1}>{name}</Text>
+                            <Text style={styles.num} numberOfLines={1}>{phone_no}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-       
+
     },
     leftIconImg: {
         height: '50%',
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         borderRadius: 10,
-        resizeMode:'contain'
+        resizeMode: 'contain'
     },
     userDetail: {
         flex: 1,

@@ -21,18 +21,12 @@ const DoctorHome = ({navigation}) => {
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-<<<<<<< HEAD
 
     fetch('https://jsonplaceholder.typicode.com/todos')
       .then((response) => response.json())
       .then((json) => setDataSource(json))
       .catch((err) => console.log(err))
       checkPermission()
-=======
-    getAppointments();
-    checkPermission();
-    //3447321161
->>>>>>> aaebef911890c4596967b2119e3b597f29ea5e8e
   }, []);
 
   const checkPermission = async () => {

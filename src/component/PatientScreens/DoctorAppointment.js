@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
-=======
-import React, { useState,useEffect } from 'react';
->>>>>>> aaebef911890c4596967b2119e3b597f29ea5e8e
 import {
   View,
   Text,
@@ -35,8 +31,6 @@ const DoctorProfile = ({ navigation }) => {
   const [data, setData] = useState([]) //arr for get all data from api
   const user = useSelector((state) => state.user.user);
   const DoctorData = navigation.getParam('doctorData')
-  const [day, setday] = useState(false);
-  const [time, settime] = useState(false);
   const [Appointments, setAppointments] = useState([]);
 
   useEffect(() => {
@@ -62,15 +56,7 @@ const DoctorProfile = ({ navigation }) => {
         console.log(error);
       });
   };
-  const openDayDropDown = () => {
-    setday(true);
-    settime(false);
-  };
-  const openTimeDropDown = () => {
-    setday(false);
-    settime(true);
-  };
-
+  
   useEffect(() => {
     getTimeSlot()
   }, [])
@@ -180,50 +166,6 @@ const DoctorProfile = ({ navigation }) => {
     <View style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <KeyboardAvoidingView enabled>
-<<<<<<< HEAD
-=======
-          <View style={styles.dropDownView}>
-            <View style={{...(Platform.OS == 'ios' && {zIndex: 10 }),width:'48%'}}>
-              <DropDownPicker
-                items={[
-                  { label: 'Mafaza Patient', value: 'Mafaza Patient' },
-                  { label: 'Personal Patient', value: 'Personal Patient' },
-                  { label: 'Both', value: 'Both' },
-                ]}
-                placeholder="Select Day"
-                selectedLabelStyle={{ color: 'black' }}
-                placeholderStyle={{ color: '#9EA0A4' }}
-                style={styles.dropDownStyle}
-                isVisible={day}
-                onOpen={() => openDayDropDown()}
-                onClose={() => setday(false)}
-                itemStyle={styles.dropDownItemStyle}
-                dropDownStyle={{ backgroundColor: '#fafafa' }}
-                // onChangeItem={(item) => setPatientType(item.value)}
-              />
-            </View>
-            <View style={{...(Platform.OS == 'ios' && {zIndex: 10 }),width:'48%'}}>
-              <DropDownPicker
-                items={[
-                  { label: 'Mafaza Patient', value: 'Mafaza Patient' },
-                  { label: 'Personal Patient', value: 'Personal Patient' },
-                  { label: 'Both', value: 'Both' },
-                ]}
-                placeholder="Select Time Slot"
-                selectedLabelStyle={{ color: 'black' }}
-                isVisible={time}
-                onOpen={() => openTimeDropDown()}
-                onClose={() => settime(false)}
-                placeholderStyle={{ color: '#9EA0A4' }}
-                style={styles.dropDownStyle}
-                itemStyle={styles.dropDownItemStyle}
-                dropDownStyle={{ backgroundColor: '#fafafa' }}
-                // onChangeItem={(item) => setPatientType(item.value)}
-              />
-            </View>
-          </View>
-
->>>>>>> aaebef911890c4596967b2119e3b597f29ea5e8e
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.inputStyle}
@@ -365,17 +307,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
   },
-<<<<<<< HEAD
   dropDownView: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-=======
-  dropDownView:{
-    flex:1,
-    flexDirection:'row',
-    justifyContent:'space-between',
->>>>>>> aaebef911890c4596967b2119e3b597f29ea5e8e
     marginTop: 20,
   },
   dropDownContainer: {

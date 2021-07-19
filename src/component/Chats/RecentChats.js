@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 10,
+    // backgroundColor:'red'
     backgroundColor: '#FBFBFB',
 
   },

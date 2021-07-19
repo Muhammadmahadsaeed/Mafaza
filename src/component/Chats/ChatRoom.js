@@ -149,48 +149,48 @@ const ChatRoom = ({ navigation }) => {
             compressImageMaxWidth: 300,
             mediaType: 'photo',
         })
-            .then((images) => {
-                if (images.length > 5) {
-                    alert("Can't share more then 5 media items.")
-                } else {
-                    let arrForServer = images.map((item) => {
-                        const imageName = item.path.split('/').pop();
-                        let img = {
-                            name: imageName,
-                            type: item.mime,
-                            uri:
-                                Platform.OS === 'android'
-                                    ? item.path
-                                    : item.path.replace('file://', ''),
-                        };
-                        return img;
-                    });
-                    let arrForRender = images.map((item) => {
-                        let base64 = `data:${item.mime};base64,${item.data}`;
-                        let image = {
-                            url: base64
-                        }
-                        return image
-                    })
-                    let messageObj = {
-                        messageId: uuid.v4(),
-                        userName: "mahad",
-                        senderId: senderId,
-                        receiverId: receiverId,
-                        type: 'image',
-                        isSending: true,
-                        imagesObj: arrForServer,
-                        content: arrForRender,
-                        sendTime: Date.now()
+        .then((images) => {
+            if (images.length > 5) {
+                alert("Can't share more then 5 media items.")
+            } else {
+                let arrForServer = images.map((item) => {
+                    const imageName = item.path.split('/').pop();
+                    let img = {
+                        name: imageName,
+                        type: item.mime,
+                        uri:
+                            Platform.OS === 'android'
+                                ? item.path
+                                : item.path.replace('file://', ''),
                     };
-                    getDataFromInput(messageObj);
-                }
-            })
-            .catch((err) => console.log(err));
+                    return img;
+                });
+                let arrForRender = images.map((item) => {
+                    let base64 = `data:${item.mime};base64,${item.data}`;
+                    let image = {
+                        url: base64
+                    }
+                    return image
+                })
+                let messageObj = {
+                    messageId: uuid.v4(),
+                    userName: "mahad",
+                    senderId: senderId,
+                    receiverId: receiverId,
+                    type: 'image',
+                    isSending: true,
+                    imagesObj: arrForServer,
+                    content: arrForRender,
+                    sendTime: Date.now()
+                };
+                getDataFromInput(messageObj);
+            }
+        })
+        .catch((err) => console.log(err));
     };
     return (
         <View style={{ flex: 1 }}>
-            <ConversationHeader navigation={navigation} />
+            <ConversationHeader navigation={navigation} data={converstion}  />
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <View style={styles.innerContainer}>
                     <FlatList style={{ flex: 1, paddingHorizontal: 10 }}

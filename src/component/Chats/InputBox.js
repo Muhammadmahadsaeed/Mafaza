@@ -28,16 +28,15 @@ class InputBox extends React.Component {
         super(props);
         this.state = {
             msg: '',
-            isLoggingIn: false,
             recordSecs: 0,
             recordTime: '0:00',
             currentPositionSec: 0,
             currentDurationSec: 0,
-            playTime: '00:00:00',
             duration: '00:00:00',
             startAudio: false,
             currentTime: 0,
             recordDuration: 0,
+            audioUri: ''
         };
         this.timer = null;
         this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -81,6 +80,9 @@ class InputBox extends React.Component {
         if (this.state.msg) {
             this.onSendMessage();
         }
+        else{
+           this.sendAudio()
+        }
     };
     onPressOut = () => {
         if (!this.state.msg && !this.state.startAudio) {
@@ -89,6 +91,37 @@ class InputBox extends React.Component {
             this.onStopRecord();
         }
     };
+    sendAudio = () => {
+        const { audioUri } = this.state
+        const fileName = audioUri.split('/').pop();
+        let audioArr = [];
+        let audio = {
+            name: fileName,
+            type: 'audio/acc',
+            uri: Platform.OS === 'android' ? audioUri : audioUri.replace('file://', ''),
+        };
+        // audio.recordTime = this.state.recordDuration;
+        audioArr.push(audio);
+        let messageObj = {
+            messageId: uuid.v4(),
+            userName: this.props.userName,
+            senderId: this.props.senderId,
+            receiverId: this.props.receiverId,
+            type: 'audio',
+            isSending: true,
+            message: audioArr,
+            content: [{ url: audioUri, time: this.state.recordTime }],
+            isDownload: false,
+            sendTime: Date.now()
+        };
+        this.props.getDataFromInput(messageObj);
+        this.setState({
+            recordSecs: 0,
+            recordTime: '0:00',
+            startAudio: false,
+            audioUri: ''
+        });
+    }
     onStartRecording = async () => {
         this.setState({ startAudio: true });
         try {
@@ -111,45 +144,17 @@ class InputBox extends React.Component {
 
     };
     onStopRecord = async () => {
-        // this.setState({ startAudio: false })
-        console.log("stop");
-        // this.setState({ startAudio: false });
         const result = await this.audioRecorderPlayer.stopRecorder();
         this.audioRecorderPlayer.removeRecordBackListener();
-        // const fileName = result.split('/').pop();
-        // let audioArr = [];
-        // let audio = {
-        //     name: fileName,
-        //     type: 'audio/acc',
-        //     uri: Platform.OS === 'android' ? result : result.replace('file://', ''),
-        // };
-        // // audio.recordTime = this.state.recordDuration;
-        // audioArr.push(audio);
-        // let messageObj = {
-        //     messageId: uuid.v4(),
-        //     userName: this.props.userName,
-        //     senderId: this.props.senderId,
-        //     receiverId: this.props.receiverId,
-        //     type: 'audio',
-        //     isSending: true,
-        //     message: audioArr,
-        //     content: [{ url: result, time: this.state.recordTime }],
-        //     isDownload: false,
-        //     sendTime: Date.now()
-        // };
-        // this.props.getDataFromInput(messageObj);
-        // this.setState({
-        //     recordSecs: 0,
-        //     recordTime: '0:00',
-        // });
-
+        this.setState({ audioUri: result })
+       
     };
     convertRecordingTimeToMinAndSec(millis) {
         var minutes = Math.floor(millis / 60000);
         var seconds = ((millis % 60000) / 1000).toFixed(0);
         let time = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
         this.setState({ recordTime: time, recordDuration: millis });
-      }
+    }
     onSendMessage = () => {
         let message = this.state.msg;
         this.setState({ msg: '' })
@@ -182,26 +187,27 @@ class InputBox extends React.Component {
         );
     };
     onCancel = async () => {
-        const fileName = result.split('/').pop();
-        console.log(fileName);
+        const { audioUri } = this.state
+        const fileName = audioUri.split('/').pop();
         const dirAudio = await getAudioFolderPath()
-        console.log(dirAudio);
         const path = `${dirAudio}/${fileName}`;
         RNFS.unlink(path)
-          .then(() => {
-            this.setState({
-              recordSecs: 0,
-              startAudio: false,
-              recordTime: '0:00',
+            .then(() => {
+                this.setState({
+                    audioUri: '',
+                    recordSecs: 0,
+                    startAudio: false,
+                    recordTime: '0:00',
+                    audioUri: ''
+                });
+            })
+            // `unlink` will throw an error, if the item to unlink does not exist
+            .catch((err) => {
+                console.log(err.message);
             });
-          })
-          // `unlink` will throw an error, if the item to unlink does not exist
-          .catch((err) => {
-            console.log(err.message);
-          });
-      };
+    };
     render() {
-        const { msg, startAudio } = this.state
+        const { msg, startAudio, audioUri } = this.state
         return (
             <KeyboardAvoidingView
                 behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -244,7 +250,7 @@ class InputBox extends React.Component {
                             onPressOut={this.onPressOut}
                             activeOpacity={0.8}>
                             <View style={styles.buttonContainer}>
-                                <Image source={msg.length ? require('../../../assets/Images/send.png') : require('../../../assets/Images/voice.png')}
+                                <Image source={msg.length || audioUri ? require('../../../assets/Images/send.png') : require('../../../assets/Images/voice.png')}
                                     style={styles.btnIcon}
                                 />
                             </View>
@@ -296,17 +302,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         alignItems: 'center',
-      },
-      audioTimerText: {
+    },
+    audioTimerText: {
         color: 'black',
         fontSize: 18,
         fontFamily: fonts.fonts.PoppinsMedium
-      },
-      cancelText: {
+    },
+    cancelText: {
         color: 'red',
         fontSize: 16,
         fontFamily: fonts.fonts.PoppinsBold
-      },
+    },
 })
 
 export default InputBox

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image, Pressable, Modal, Dimensions, } from 'react-native';
 import fonts from '../../constants/fonts';
+import ConversationAudio from './ConversationAudio';
 import ConversationImage from './ConversationImage';
 
 const Conversation = ({ message, myId }) => {
@@ -29,6 +30,9 @@ const Conversation = ({ message, myId }) => {
             {type == 'image' && (
                 <ConversationImage data={message} />
             )}
+            {type == 'audio' && 
+            <ConversationAudio data={message} />
+          }
         </TouchableOpacity>
     )
 }
