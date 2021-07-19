@@ -65,26 +65,26 @@ const DoctorProfile = ({navigation}) => {
     getTimeSlot()
   }, [])
 
-  const getTimeSlot = async () => {
-    await fetch(`${api}appointment/getfree/slots`, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify({
-        doctorId: DoctorData._id
-      })
-    })
-      .then(res => res.json())
-      .then((json) => {
-        setData(json.data);
-        getDayFromUser(json.data[0].day)
+  // const getTimeSlot = async () => {
+  //   await fetch(`${api}appointment/getfree/slots`, {
+  //     method: 'POST',
+  //     headers: headers,
+  //     body: JSON.stringify({
+  //       doctorId: DoctorData._id
+  //     })
+  //   })
+  //     .then(res => res.json())
+  //     .then((json) => {
+  //       setData(json.data);
+  //       getDayFromUser(json.data[0].day)
         
-        // const day = json.data.map((res) => {
-        //   return {label: res.day, value: res.day};
-        // });
-        // setShowDays(day);
-      })
-      .catch((err) => console.log(err));
-  };
+  //       // const day = json.data.map((res) => {
+  //       //   return {label: res.day, value: res.day};
+  //       // });
+  //       // setShowDays(day);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   const getDayFromUser = (item) => {
     // setUserSelectedDay(item);

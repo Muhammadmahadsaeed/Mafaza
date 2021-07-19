@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "70694245296-geds2n2mvs0nf0rse1f3s43jluici9gg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mafaza",
+            "certificate_hash": "1f17024c791c31ec61e93157f598080d87103610"
+          }
+        },
+        {
           "client_id": "70694245296-m53n8416o9gnduejcb1mn9guocpoe59k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

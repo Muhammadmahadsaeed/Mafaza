@@ -62,7 +62,6 @@ const SignIn = ({navigation}) => {
     seterrortext('');
     if (num != '' && correctnum) {
       if (password.length >= 6) {
-        console.log(formattedValue);
         setLoading(true);
         fetch(`${api}auth/login`, {
           method: 'POST',
@@ -75,7 +74,7 @@ const SignIn = ({navigation}) => {
         })
           .then((response) => response.json())
           .then((responseJson) => {
-       
+           
             setLoading(false);
             if (responseJson.status == 1) {
               storeData(responseJson);
