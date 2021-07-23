@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { createStackNavigator,TransitionPresets } from 'react-navigation-stack';
-import { ChatRoom } from '../component/Chats';
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
+// import { ChatRoom } from '../component/Chats';
 import * as PatientScreen from '../component/PatientScreens'
 import { HamBurger } from '../common';
 import fonts from '../constants/fonts';
+import { ChatRoom } from '../component/chat';
 const HomeNavigator = createStackNavigator({
   PatientHomeScreen: {
     screen: PatientScreen.PatientHome,
@@ -11,7 +12,13 @@ const HomeNavigator = createStackNavigator({
       headerShown: false
     }
   },
-  ChatScreen: {
+  // ChatScreen: { //gifted chatroom
+  //   screen: ChatRoom,
+  //   navigationOptions: {
+  //     headerShown: false
+  //   }
+  // },
+  ChatScreen: { //custom chatroom
     screen: ChatRoom,
     navigationOptions: {
       headerShown: false
@@ -42,11 +49,11 @@ const HomeNavigator = createStackNavigator({
       },
     }),
   }
-},{
+}, {
   defaultNavigationOptions: {
     ...TransitionPresets.SlideFromRightIOS,
   },
-  initialRouteName:'PatientHomeScreen'
+  initialRouteName: 'PatientHomeScreen'
 });
 
 export default HomeNavigator;

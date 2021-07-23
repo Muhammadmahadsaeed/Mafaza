@@ -13,6 +13,7 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 import { renderInputToolbar, renderActions, renderComposer, renderSend } from './InputBox';
+import InputBox from '../Chats/InputBox';
 
 const ChatRoom = ({ }) => {
     const [messages, setMessages] = useState([]);
@@ -31,20 +32,6 @@ const ChatRoom = ({ }) => {
             },
             {
                 _id: 2,
-                text: 'My message',
-                createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50',
-                },
-                image: 'https://placeimg.com/140/140/any',
-                sent: true,
-                received: true,
-                pending: true,
-            },
-            {
-                _id: 3,
                 text: 'First message',
                 createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
                 user: {
@@ -62,9 +49,7 @@ const ChatRoom = ({ }) => {
 
     const CustomInputBox = (props) => {
         return (
-            <View style={{ backgroundColor: 'red' }}>
-                <Text>inpu</Text>
-            </View>
+           <InputBox {...props} />
         )
     }
   
@@ -75,11 +60,11 @@ const ChatRoom = ({ }) => {
             user={{
                 _id: 1,
             }}
-            renderInputToolbar={renderInputToolbar}
-            renderActions={renderActions}
-            renderComposer={renderComposer}
-            alwaysShowSend
-            renderSend={renderSend}
+            // renderInputToolbar={CustomInputBox}
+            // renderActions={renderActions}
+            renderComposer={CustomInputBox}
+            // alwaysShowSend
+            // renderSend={renderSend}
         />
     )
 }

@@ -25,10 +25,12 @@ const ConversationImage = ({ data }) => {
     data.imagesObj?.forEach((image) => {
       formdata.append('messageContent', image);
     });
+    console.log(data.imagesObj);
     await fetch(`http://34.200.187.81:8080/message/media`, {
       method: 'POST',
       headers: {
-        'content-type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',// this is a imp line
+        Accept: 'application/json',
       },
       body: formdata,
     })
@@ -49,7 +51,7 @@ const ConversationImage = ({ data }) => {
       })
       .catch((err) => console.log(err));
   }
-  
+
   const sendMessageToServer = (msg) => {
     // mutation for sending the message
     sendMessage({
